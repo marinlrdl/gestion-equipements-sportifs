@@ -17,6 +17,7 @@
     <!-- Styles CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/carte.css">
+    <link rel="stylesheet" href="css/photos.css">
 </head>
 <body>
     <!-- Header -->
@@ -370,6 +371,42 @@
                             </div>
                         </div>
                     </section>
+
+                    <!-- Galerie de photos -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-camera"></i>
+                            Photos de l'équipement
+                        </h2>
+                        <div id="galerie-photos" class="photos-container">
+                            <div class="loading-placeholder">
+                                <i class="icon-refresh"></i>
+                                <p>Chargement des photos...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Zone d'upload pour les utilisateurs autorisés -->
+                        <div class="photo-upload-section" id="photo-upload-section" style="display: none;">
+                            <div class="upload-header">
+                                <h3>Ajouter des photos</h3>
+                            </div>
+                            <div class="photo-upload-area" id="photo-upload-area">
+                                <input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
+                                <div class="upload-content">
+                                    <i class="icon-upload"></i>
+                                    <p>Glissez vos photos ici ou <span class="upload-link">cliquez pour sélectionner</span></p>
+                                    <small>Formats acceptés : JPG, PNG, GIF (max 5MB par photo)</small>
+                                </div>
+                            </div>
+                            <div class="upload-controls">
+                                <button type="button" class="btn btn-secondary" id="btn-upload">
+                                    <i class="icon-camera"></i>
+                                    Ajouter des photos
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Formulaire de contact -->
                     <section class="detail-section">
                         <h2 class="section-title">
@@ -598,6 +635,46 @@
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/densite.js"></script>
+    <script src="js/photos.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- Initialisation des photos pour la page détail -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Récupérer l'ID de l'équipement depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const equipementId = urlParams.get('id');
+            
+            if (equipementId) {
+                // Charger les photos existantes
+                afficherPhotos(equipementId, 'galerie-photos');
+                
+                // Initialiser l'upload de photos si l'utilisateur est autorisé
+                // (Cette logique dépend du système d'authentification)
+                const utilisateur = JSON.parse(localStorage.getItem('utilisateur') || '{}');
+                const peutModifier = utilisateur && (
+                    utilisateur.role === 'administrateur' ||
+                    utilisateur.role === 'mairie' ||
+                    utilisateur.role === 'prefecture_departementale' ||
+                    utilisateur.role === 'prefecture_regionale'
+                );
+                
+                if (peutModifier) {
+                    initialiserUploadPhotos(equipementId);
+                    document.getElementById('photo-upload-section').style.display = 'block';
+                    
+                    // Gestion du bouton d'upload
+                    const btnUpload = document.getElementById('btn-upload');
+                    const photoInput = document.getElementById('photo-input');
+                    
+                    if (btnUpload && photoInput) {
+                        btnUpload.addEventListener('click', () => {
+                            photoInput.click();
+                        });
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>

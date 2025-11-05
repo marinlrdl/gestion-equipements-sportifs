@@ -21,6 +21,31 @@ async function initialiserPageEquipements() {
   await chargerEquipementsCollectivite();
   afficherTableauEquipements();
 }
+/**
+ * Génère l'aperçu photo pour un équipement
+ * @param {Object} equip - Données de l'équipement
+ * @returns {string} HTML de l'aperçu photo
+ */
+function genererApercuPhoto(equip) {
+  const photos = equip.photos || [];
+  
+  if (photos.length > 0) {
+    const premierePhoto = photos[0];
+    return `
+      <div class="photo-preview-container">
+        <img src="${premierePhoto}" alt="${equip.equip_nom}" class="photo-preview-thumbnail" loading="lazy">
+        <div class="photo-count-badge">${photos.length}</div>
+      </div>
+    `;
+  } else {
+    return `
+      <div class="no-photo-placeholder">
+        <i class="icon-camera"></i>
+        <span>Aucune photo</span>
+      </div>
+    `;
+  }
+}
 
 /**
  * Affiche les informations de l'utilisateur connecté
@@ -106,7 +131,11 @@ function afficherTableauEquipements() {
     const tauxOccupation = window.carte.calculateTauxOccupation ? window.carte.calculateTauxOccupation(equip) : 0;
     const couleurDensite = window.carte.getCouleurDensite ? window.carte.getCouleurDensite(equip) : '#00A94F';
     
+    // Générer l'aperçu photo
+    const photoPreview = genererApercuPhoto(equip);
+    
     tr.innerHTML = `
+      <td class="photo-preview-cell">${photoPreview}</td>
       <td>${equip.equip_nom || 'N/A'}</td>
       <td>${equip.commune_nom || 'N/A'} ${equip.inst_cp ? '(' + equip.inst_cp + ')' : ''}</td>
       <td>${equip.equip_type_name || 'Non précisé'}</td>
@@ -267,7 +296,11 @@ function afficherEquipementsFiltres(equipementsFiltres) {
     const tauxOccupation = window.carte.calculateTauxOccupation ? window.carte.calculateTauxOccupation(equip) : 0;
     const couleurDensite = window.carte.getCouleurDensite ? window.carte.getCouleurDensite(equip) : '#00A94F';
     
+    // Générer l'aperçu photo
+    const photoPreview = genererApercuPhoto(equip);
+    
     tr.innerHTML = `
+      <td class="photo-preview-cell">${photoPreview}</td>
       <td>${equip.equip_nom || 'N/A'}</td>
       <td>${equip.commune_nom || 'N/A'} ${equip.inst_cp ? '(' + equip.inst_cp + ')' : ''}</td>
       <td>${equip.equip_type_name || 'Non précisé'}</td>

@@ -14,6 +14,7 @@
     <!-- Styles CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/formulaire.css">
+    <link rel="stylesheet" href="css/photos.css">
 </head>
 <body>
     <!-- Header -->
@@ -479,6 +480,40 @@
                     </div>
                 </fieldset>
 
+                <!-- Section Photos -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-camera"></i>
+                        Photos de l'équipement
+                    </legend>
+                    <div class="photo-upload-section">
+                        <!-- Zone d'upload -->
+                        <div class="photo-upload-area" id="photo-upload-area">
+                            <input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
+                            <div class="upload-content">
+                                <i class="icon-upload"></i>
+                                <h3>Glissez vos photos ici</h3>
+                                <p>ou <span class="upload-link">cliquez pour sélectionner</span></p>
+                                <small>Formats acceptés : JPG, PNG, GIF (max 5MB par photo)</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Bouton upload alternatif -->
+                        <div class="upload-controls">
+                            <button type="button" class="btn btn-secondary" id="btn-upload">
+                                <i class="icon-camera"></i>
+                                Ajouter des photos
+                            </button>
+                        </div>
+                        
+                        <!-- Container pour les photos existantes -->
+                        <div id="existing-photos-container" class="existing-photos-container" style="display: none;">
+                            <h4>Photos existantes</h4>
+                            <div id="existing-photos" class="photo-list"></div>
+                        </div>
+                    </div>
+                </fieldset>
+
                 <!-- Boutons d'action -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
@@ -536,6 +571,32 @@
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/photos.js"></script>
     <script src="js/formulaire-equipement.js"></script>
+    
+    <!-- Initialisation des photos -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser l'upload de photos si on est en mode édition
+            const urlParams = new URLSearchParams(window.location.search);
+            const equipementId = urlParams.get('id');
+            
+            if (equipementId) {
+                initialiserUploadPhotos(equipementId);
+                // Charger les photos existantes
+                afficherPhotos(equipementId, 'existing-photos-container');
+            }
+            
+            // Gestion du bouton d'upload
+            const btnUpload = document.getElementById('btn-upload');
+            const photoInput = document.getElementById('photo-input');
+            
+            if (btnUpload && photoInput) {
+                btnUpload.addEventListener('click', () => {
+                    photoInput.click();
+                });
+            }
+        });
+    </script>
 </body>
 </html>
