@@ -276,6 +276,83 @@
                         </div>
                     </section>
 
+                    <!-- Densité en temps réel -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-users"></i>
+                            Densité et suivi en temps réel
+                        </h2>
+                        <div class="density-content">
+                            <!-- Alerte de densité -->
+                            <div id="alerte-densite" class="density-alert"></div>
+                            
+                            <!-- Contrôles de densité -->
+                            <div class="density-controls">
+                                <div class="density-display">
+                                    <div class="density-current">
+                                        <span class="density-label">Densité actuelle :</span>
+                                        <span class="density-value" id="currentDensity">0</span>
+                                        <span class="density-separator">/</span>
+                                        <span class="density-max" id="maxCapacity">0</span>
+                                        <span class="density-unit">personnes</span>
+                                    </div>
+                                    <div class="density-progress">
+                                        <div class="progress-bar" id="densityProgress" style="width: 0%;">
+                                            <span class="progress-text" id="densityPercentage">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="density-update">
+                                    <label for="densityInput" class="density-input-label">
+                                        Mettre à jour la densité :
+                                    </label>
+                                    <div class="density-input-group">
+                                        <input
+                                            type="range"
+                                            id="densityInput"
+                                            min="0"
+                                            max="100"
+                                            value="0"
+                                            class="density-slider"
+                                        >
+                                        <input
+                                            type="number"
+                                            id="densityNumber"
+                                            min="0"
+                                            max="100"
+                                            value="0"
+                                            class="density-number"
+                                        >
+                                        <button type="button" id="updateDensityBtn" class="btn btn-primary">
+                                            Mettre à jour
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Graphique de densité -->
+                            <div class="density-chart-section">
+                                <h3>Historique des densités (7 derniers jours)</h3>
+                                <div class="chart-container">
+                                    <canvas id="graphique-densite" width="800" height="400">
+                                        Votre navigateur ne supporte pas Canvas. Veuillez utiliser un navigateur moderne.
+                                    </canvas>
+                                </div>
+                                <div class="chart-actions">
+                                    <button type="button" id="refreshChartBtn" class="btn btn-secondary">
+                                        <i class="icon-refresh"></i>
+                                        Actualiser le graphique
+                                    </button>
+                                    <button type="button" id="exportDensityBtn" class="btn btn-secondary">
+                                        <i class="icon-download"></i>
+                                        Exporter les données
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Observations -->
                     <section class="detail-section" id="observationsSection" style="display: none;">
                         <h2 class="section-title">
@@ -327,6 +404,21 @@
                             <div class="quick-stat">
                                 <span class="stat-label">Numéro d'équipement</span>
                                 <span class="stat-value" id="equipmentNumber">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statut de densité rapide -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Statut densité</h3>
+                        <div class="quick-density-status">
+                            <div class="density-status-item">
+                                <span class="status-label">Niveau actuel :</span>
+                                <span class="status-value" id="densityStatus">--</span>
+                            </div>
+                            <div class="density-status-item">
+                                <span class="status-label">Dernière mise à jour :</span>
+                                <span class="status-value" id="densityLastUpdate">--</span>
                             </div>
                         </div>
                     </div>
@@ -386,6 +478,7 @@
     <!-- Scripts JavaScript -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/densite.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

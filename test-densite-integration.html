@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests Système Densité - Équipements Sportifs</title>
+    <meta name="description" content="Page de tests pour le système de gestion de la densité des équipements sportifs">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* Styles spécifiques pour la page de tests */
+        .test-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: var(--spacing-2xl) 0;
+            text-align: center;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+        
+        .test-controls {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .test-results {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow);
+        }
+        
+        .test-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .test-stat {
+            background-color: var(--light-gray);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+        
+        .test-stat-number {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .test-stat-number.success { color: var(--secondary-color); }
+        .test-stat-number.error { color: var(--danger-color); }
+        .test-stat-number.info { color: var(--primary-color); }
+        
+        .test-stat-label {
+            color: var(--gray);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .test-details {
+            margin-top: var(--spacing-xl);
+        }
+        
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        
+        .test-item.pass {
+            background-color: rgba(0, 169, 79, 0.1);
+        }
+        
+        .test-item.fail {
+            background-color: rgba(230, 57, 70, 0.1);
+        }
+        
+        .test-name {
+            font-weight: var(--font-weight-medium);
+            color: var(--black);
+        }
+        
+        .test-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .test-duration {
+            font-size: var(--font-size-xs);
+            color: var(--gray);
+        }
+        
+        .test-error {
+            margin-top: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background-color: rgba(230, 57, 70, 0.1);
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-sm);
+            color: var(--danger-color);
+        }
+        
+        .btn-test {
+            margin: 0 var(--spacing-sm);
+        }
+        
+        .btn-test.running {
+            position: relative;
+            color: transparent;
+        }
+        
+        .btn-test.running::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        .configuration-display {
+            background-color: var(--light-gray);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-xl);
+            font-family: 'Courier New', monospace;
+            font-size: var(--font-size-sm);
+        }
+        
+        .demo-section {
+            margin-top: var(--spacing-2xl);
+            padding: var(--spacing-xl);
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius-lg);
+        }
+        
+        .demo-chart {
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+        }
+        
+        #demoGraphiqueDensite {
+            max-width: 100%;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .progress-container {
+            margin: var(--spacing-lg) 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: var(--light-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color) 0%, var(--warning-color) 70%, var(--danger-color) 100%);
+            border-radius: var(--border-radius);
+            transition: width 0.5s ease-in-out;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--white);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-bold);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="test-header">
+        <div class="container">
+            <h1>🧪 Tests du Système de Densité</h1>
+            <p class="test-subtitle">
+                Validation complète des fonctionnalités de gestion de la densité des équipements sportifs
+            </p>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="test-container">
+        <!-- Configuration -->
+        <div class="configuration-display">
+            <h3>📋 Configuration des tests</h3>
+            <div id="configDisplay">
+                <p><strong>Chargement de la configuration...</strong></p>
+            </div>
+        </div>
+
+        <!-- Contrôles de test -->
+        <div class="test-controls">
+            <h2>⚡ Exécution des tests</h2>
+            <p style="margin-bottom: var(--spacing-lg); color: var(--gray);">
+                Cliquez sur le bouton ci-dessous pour lancer tous les tests du système de densité.
+                Les tests incluent la validation des modules, des fonctions, et l'intégration Supabase.
+            </p>
+            
+            <button id="runTestsBtn" class="btn btn-primary btn-test" onclick="lancerTests()">
+                🚀 Lancer tous les tests
+            </button>
+            
+            <button id="resetBtn" class="btn btn-secondary btn-test" onclick="resetTests()">
+                🔄 Réinitialiser
+            </button>
+        </div>
+
+        <!-- Résultats des tests -->
+        <div class="test-results">
+            <h2>📊 Résultats des tests</h2>
+            
+            <!-- Résumé -->
+            <div id="testSummary" class="test-summary" style="display: none;">
+                <div class="test-stat">
+                    <div id="totalTests" class="test-stat-number info">0</div>
+                    <div class="test-stat-label">Total des tests</div>
+                </div>
+                <div class="test-stat">
+                    <div id="passedTests" class="test-stat-number success">0</div>
+                    <div class="test-stat-label">Tests réussis</div>
+                </div>
+                <div class="test-stat">
+                    <div id="failedTests" class="test-stat-number error">0</div>
+                    <div class="test-stat-label">Tests échoués</div>
+                </div>
+                <div class="test-stat">
+                    <div id="successRate" class="test-stat-number">0%</div>
+                    <div class="test-stat-label">Taux de réussite</div>
+                </div>
+            </div>
+            
+            <!-- Barre de progression -->
+            <div id="progressContainer" class="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill" style="width: 0%;">
+                        <div id="progressText" class="progress-text">0%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Détail des tests -->
+            <div id="testDetails" class="test-details" style="display: none;">
+                <h3>📋 Détail des résultats</h3>
+                <div id="testList"></div>
+            </div>
+        </div>
+
+        <!-- Démonstration interactive -->
+        <div class="demo-section">
+            <h2>🎮 Démonstration interactive</h2>
+            <p>Testez les fonctionnalités de densité en temps réel :</p>
+            
+            <!-- Contrôles de démonstration -->
+            <div class="demo-controls">
+                <div class="density-demo">
+                    <label for="demoDensity">Densité actuelle :</label>
+                    <input type="range" id="demoDensity" min="0" max="100" value="50" 
+                           style="width: 300px; margin: 0 1rem;">
+                    <input type="number" id="demoDensityNumber" min="0" max="100" value="50" 
+                           style="width: 80px; padding: var(--spacing-sm);">
+                    <span> / 100 personnes</span>
+                </div>
+                
+                <div id="demoAlert" class="alert" style="margin-top: var(--spacing-md); display: none;">
+                    <strong>Niveau d'alerte :</strong> <span id="demoAlertText">--</span>
+                </div>
+                
+                <div class="demo-chart">
+                    <h4>Graphique de démonstration</h4>
+                    <canvas id="demoGraphiqueDensite" width="600" height="300">
+                        Votre navigateur ne supporte pas Canvas.
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/densite.js"></script>
+    <script src="js/test-densite.js"></script>
+    
+    <script>
+        // Variables globales pour les tests
+        let currentTestResults = null;
+        let isRunning = false;
+        
+        // Fonction pour afficher la configuration
+        function afficherConfiguration() {
+            const config = window.DensiteTests?.TEST_CONFIG;
+            const configDisplay = document.getElementById('configDisplay');
+            
+            if (config) {
+                configDisplay.innerHTML = `
+                    <p><strong>ID Équipement de test :</strong> ${config.testEquipmentId}</p>
+                    <p><strong>Valeurs de densité testées :</strong> [${config.testDensityValues.join(', ')}]</p>
+                    <p><strong>Capacité de test :</strong> ${config.testCapacity}</p>
+                    <p><strong>Timeout :</strong> ${config.timeout}ms</p>
+                    <p><strong>Supabase configuré :</strong> ${window.AppConfig?.supabase ? '✅ Oui' : '❌ Non'}</p>
+                `;
+            } else {
+                configDisplay.innerHTML = '<p style="color: var(--danger-color);"><strong>⚠️ Configuration des tests non disponible</strong></p>';
+            }
+        }
+        
+        // Fonction pour lancer les tests
+        async function lancerTests() {
+            if (isRunning) {
+                alert('Les tests sont déjà en cours d\'exécution !');
+                return;
+            }
+            
+            isRunning = true;
+            const runBtn = document.getElementById('runTestsBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // Mettre à jour l'état des boutons
+            runBtn.classList.add('running');
+            runBtn.textContent = 'Tests en cours...';
+            runBtn.disabled = true;
+            resetBtn.disabled = true;
+            
+            // Réinitialiser l'affichage
+            resetTests(false);
+            
+            try {
+                // Lancer les tests
+                const results = await window.DensiteTests.executerTestsDensite();
+                currentTestResults = results;
+                
+                // Afficher les résultats
+                afficherResultats(results);
+                
+            } catch (error) {
+                console.error('Erreur lors de l\'exécution des tests:', error);
+                alert('Erreur lors de l\'exécution des tests : ' + error.message);
+            } finally {
+                // Restaurer l'état des boutons
+                isRunning = false;
+                runBtn.classList.remove('running');
+                runBtn.textContent = '🚀 Lancer tous les tests';
+                runBtn.disabled = false;
+                resetBtn.disabled = false;
+            }
+        }
+        
+        // Fonction pour afficher les résultats
+        function afficherResultats(results) {
+            // Afficher le résumé
+            const summary = results.summary;
+            document.getElementById('testSummary').style.display = 'grid';
+            document.getElementById('totalTests').textContent = summary.total;
+            document.getElementById('passedTests').textContent = summary.passed;
+            document.getElementById('failedTests').textContent = summary.failed;
+            document.getElementById('successRate').textContent = summary.successRate + '%';
+            
+            // Afficher les détails
+            const testList = document.getElementById('testList');
+            testList.innerHTML = '';
+            
+            results.results.forEach(result => {
+                const testItem = document.createElement('div');
+                testItem.className = `test-item ${result.status.toLowerCase()}`;
+                
+                testItem.innerHTML = `
+                    <div class="test-name">${result.name}</div>
+                    <div class="test-status">
+                        <span>${result.status}</span>
+                        <span class="test-duration">${result.duration}ms</span>
+                        ${result.status === 'FAIL' ? 
+                            `<div class="test-error">${result.error}</div>` : 
+                            ''
+                        }
+                    </div>
+                `;
+                
+                testList.appendChild(testItem);
+            });
+            
+            document.getElementById('testDetails').style.display = 'block';
+            
+            // Animation de la barre de progression
+            const progressContainer = document.getElementById('progressContainer');
+            progressContainer.style.display = 'block';
+            
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            let progress = 0;
+            const increment = 100 / results.results.length;
+            const interval = setInterval(() => {
+                progress += increment;
+                if (progress >= summary.successRate) {
+                    progress = summary.successRate;
+                    clearInterval(interval);
+                }
+                
+                progressFill.style.width = progress + '%';
+                progressText.textContent = Math.round(progress) + '%';
+            }, 200);
+        }
+        
+        // Fonction pour réinitialiser les tests
+        function resetTests(alertUser = true) {
+            currentTestResults = null;
+            document.getElementById('testSummary').style.display = 'none';
+            document.getElementById('testDetails').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'none';
+            
+            if (alertUser) {
+                alert('Tests réinitialisés !');
+            }
+        }
+        
+        // Démonstration interactive
+        function initialiserDemonstration() {
+            const densitySlider = document.getElementById('demoDensity');
+            const densityNumber = document.getElementById('demoDensityNumber');
+            const demoAlert = document.getElementById('demoAlert');
+            const demoAlertText = document.getElementById('demoAlertText');
+            
+            function updateDemo() {
+                const value = parseInt(densitySlider.value);
+                densityNumber.value = value;
+                
+                // Vérifier l'alerte
+                if (window.DensiteManager) {
+                    const alerte = window.DensiteManager.verifierAlerteDensite(value, 100);
+                    demoAlertText.textContent = `${alerte.niveau} - ${alerte.message}`;
+                    demoAlert.className = `alert alert-${alerte.niveau.toLowerCase()}`;
+                    demoAlert.style.display = 'block';
+                    
+                    // Mettre à jour le graphique de démonstration
+                    const historiqueDemo = [
+                        { densite_personnes: 20, timestamp: '2025-11-01T10:00:00Z' },
+                        { densite_personnes: 35, timestamp: '2025-11-02T10:00:00Z' },
+                        { densite_personnes: value, timestamp: '2025-11-05T10:00:00Z' },
+                    ];
+                    
+                    if (window.DensiteManager.afficherGraphiqueDensite) {
+                        window.DensiteManager.afficherGraphiqueDensite(
+                            historiqueDemo, 
+                            100, 
+                            'demoGraphiqueDensite'
+                        );
+                    }
+                }
+            }
+            
+            // Synchroniser le slider et le champ numérique
+            densitySlider.addEventListener('input', updateDemo);
+            densityNumber.addEventListener('input', function() {
+                let value = parseInt(this.value) || 0;
+                value = Math.max(0, Math.min(100, value));
+                this.value = value;
+                densitySlider.value = value;
+                updateDemo();
+            });
+            
+            // Initialiser la démonstration
+            updateDemo();
+        }
+        
+        // Initialisation de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📋 Initialisation de la page de tests de densité...');
+            
+            // Afficher la configuration
+            afficherConfiguration();
+            
+            // Initialiser la démonstration
+            initialiserDemonstration();
+            
+            console.log('✅ Page de tests de densité initialisée');
+        });
+        
+        // Fonction globale pour lancer les tests (utilisée par le bouton)
+        window.lancerTests = lancerTests;
+        window.resetTests = resetTests;
+    </script>
+</body>
+</html>
