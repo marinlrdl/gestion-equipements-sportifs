@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire Équipement - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Formulaire d'ajout ou modification d'équipement sportif">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/formulaire.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="Logo Équipements Sportifs" class="logo">
+                    <span class="brand-name">Équipements Sportifs</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="carte.html" class="nav-link">Carte Interactive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="equipements.html" class="nav-link">Équipements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="connexion.html" class="nav-link">Connexion</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- En-tête du formulaire -->
+            <div class="form-header">
+                <div class="form-title">
+                    <h1 id="formTitle">Nouvel équipement</h1>
+                    <p class="form-subtitle">
+                        Remplissez les informations de l'équipement sportif
+                    </p>
+                </div>
+                <div class="form-actions">
+                    <a href="equipements.html" class="btn btn-secondary">
+                        <i class="icon-arrow-left"></i>
+                        Retour à la liste
+                    </a>
+                </div>
+            </div>
+
+            <!-- Formulaire -->
+            <form class="equipment-form" id="equipmentForm">
+                <!-- Section Identification -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-info"></i>
+                        Identification
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="equipNom" class="form-label required">Nom de l'équipement</label>
+                            <input 
+                                type="text" 
+                                id="equipNom" 
+                                name="equip_nom" 
+                                class="form-input" 
+                                placeholder="Ex: Terrain de football communal"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="equipType" class="form-label required">Type d'équipement</label>
+                            <select id="equipType" name="equip_type_name" class="form-select" required>
+                                <option value="">Sélectionnez un type</option>
+                                <option value="terrain_sport">Terrain de sport</option>
+                                <option value="salle_sport">Salle de sport</option>
+                                <option value="piscine">Piscine</option>
+                                <option value="stade">Stade</option>
+                                <option value="complexe_sportif">Complexe sportif</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="equipNature" class="form-label">Nature de l'équipement</label>
+                            <input 
+                                type="text" 
+                                id="equipNature" 
+                                name="equip_nature" 
+                                class="form-input" 
+                                placeholder="Ex: Pâte synthétique, Gazon naturel..."
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="anneeMiseService" class="form-label">Année de mise en service</label>
+                            <input 
+                                type="number" 
+                                id="anneeMiseService" 
+                                name="annee_mise_en_service" 
+                                class="form-input" 
+                                min="1900" 
+                                max="2024"
+                                placeholder="2020"
+                            >
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Installation -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-building"></i>
+                        Installation
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="instNom" class="form-label">Nom de l'installation</label>
+                            <input 
+                                type="text" 
+                                id="instNom" 
+                                name="inst_nom" 
+                                class="form-input" 
+                                placeholder="Ex: Complexe sportif municipal"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="instAdresse" class="form-label">Adresse</label>
+                            <input 
+                                type="text" 
+                                id="instAdresse" 
+                                name="inst_adresse" 
+                                class="form-input" 
+                                placeholder="123 Rue du Sport"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="instCp" class="form-label">Code postal</label>
+                            <input 
+                                type="text" 
+                                id="instCp" 
+                                name="inst_cp" 
+                                class="form-input" 
+                                placeholder="75001"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="communeNom" class="form-label">Commune</label>
+                            <input 
+                                type="text" 
+                                id="communeNom" 
+                                name="commune_nom" 
+                                class="form-input" 
+                                placeholder="Paris"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="departementCode" class="form-label">Département</label>
+                            <select id="departementCode" name="departement_code" class="form-select">
+                                <option value="">Sélectionnez un département</option>
+                                <option value="75">Paris (75)</option>
+                                <option value="69">Rhône (69)</option>
+                                <option value="13">Bouches-du-Rhône (13)</option>
+                                <option value="59">Nord (59)</option>
+                                <option value="33">Gironde (33)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regionNom" class="form-label">Région</label>
+                            <input 
+                                type="text" 
+                                id="regionNom" 
+                                name="region_nom" 
+                                class="form-input" 
+                                placeholder="Île-de-France"
+                            >
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Géolocalisation -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-location"></i>
+                        Géolocalisation
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="latitude" class="form-label">Latitude</label>
+                            <input 
+                                type="number" 
+                                id="latitude" 
+                                name="latitude" 
+                                class="form-input" 
+                                step="any"
+                                placeholder="48.8566"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="longitude" class="form-label">Longitude</label>
+                            <input 
+                                type="number" 
+                                id="longitude" 
+                                name="longitude" 
+                                class="form-input" 
+                                step="any"
+                                placeholder="2.3522"
+                            >
+                        </div>
+
+                        <div class="form-group full-width">
+                            <button type="button" class="btn btn-secondary" id="geolocateBtn">
+                                <i class="icon-map-pin"></i>
+                                Géolocaliser automatiquement
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Dimensions -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-maximize"></i>
+                        Dimensions de l'aire d'évolution
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="aireLongueur" class="form-label">Longueur (m)</label>
+                            <input 
+                                type="number" 
+                                id="aireLongueur" 
+                                name="aire_longueur" 
+                                class="form-input" 
+                                step="0.01"
+                                placeholder="105.00"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aireLargeur" class="form-label">Largeur (m)</label>
+                            <input 
+                                type="number" 
+                                id="aireLargeur" 
+                                name="aire_largeur" 
+                                class="form-input" 
+                                step="0.01"
+                                placeholder="68.00"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aireHauteur" class="form-label">Hauteur (m)</label>
+                            <input 
+                                type="number" 
+                                id="aireHauteur" 
+                                name="aire_hauteur" 
+                                class="form-input" 
+                                step="0.01"
+                                placeholder="0.00"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="aireSurface" class="form-label">Surface (m²)</label>
+                            <input 
+                                type="number" 
+                                id="aireSurface" 
+                                name="aire_surface" 
+                                class="form-input" 
+                                step="0.01"
+                                placeholder="7140.00"
+                            >
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Équipements et Installations -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-settings"></i>
+                        Équipements et installations
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="aireEclairage" name="aire_eclairage" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Éclairage présent
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tribunePlaces" class="form-label">Places en tribune</label>
+                            <input 
+                                type="number" 
+                                id="tribunePlaces" 
+                                name="tribune_places_assises" 
+                                class="form-input" 
+                                min="0"
+                                placeholder="0"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vestiairesSportifs" class="form-label">Vestiaires sportifs</label>
+                            <input 
+                                type="number" 
+                                id="vestiairesSportifs" 
+                                name="vestiaires_sportifs_nb" 
+                                class="form-input" 
+                                min="0"
+                                placeholder="2"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vestiairesArbitres" class="form-label">Vestiaires arbitres</label>
+                            <input 
+                                type="number" 
+                                id="vestiairesArbitres" 
+                                name="vestiaires_arbitres_nb" 
+                                class="form-input" 
+                                min="0"
+                                placeholder="1"
+                            >
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="douchesPresence" name="douches_presence" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Douches présentes
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="sanitairesPresence" name="sanitaires_presence" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Sanitaires présents
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Accessibilité PMR -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-accessibility"></i>
+                        Accessibilité PMR
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="accessPmrGlobal" class="form-label">Accessibilité globale</label>
+                            <select id="accessPmrGlobal" name="access_pmr_global" class="form-select">
+                                <option value="">Non renseigné</option>
+                                <option value="accessible">Accessible</option>
+                                <option value="partiellement_accessible">Partiellement accessible</option>
+                                <option value="non_accessible">Non accessible</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accessPmrAccueil" name="access_pmr_accueil" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Accueil accessible
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accessPmrAire" name="access_pmr_aire" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Aire de jeu accessible
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accessPmrSanitaires" name="access_pmr_sanitaires" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Sanitaires accessibles
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accessPmrVestiaires" name="access_pmr_vestiaires" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Vestiaires accessibles
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accessPmrDouches" name="access_pmr_douches" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Douches accessibles
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Gestion -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-users"></i>
+                        Gestion
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="proprietaireType" class="form-label">Type de propriétaire</label>
+                            <select id="proprietaireType" name="proprietaire_type" class="form-select">
+                                <option value="">Sélectionnez</option>
+                                <option value="commune">Commune</option>
+                                <option value="departement">Département</option>
+                                <option value="region">Région</option>
+                                <option value="intercommunalite">Intercommunalité</option>
+                                <option value="associations">Association</option>
+                                <option value="prive">Privé</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gestionnaireType" class="form-label">Type de gestionnaire</label>
+                            <select id="gestionnaireType" name="gestionnaire_type" class="form-select">
+                                <option value="">Sélectionnez</option>
+                                <option value="commune">Commune</option>
+                                <option value="departement">Département</option>
+                                <option value="region">Région</option>
+                                <option value="intercommunalite">Intercommunalité</option>
+                                <option value="associations">Association</option>
+                                <option value="prive">Privé</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="equipAccesLibre" name="equip_acces_libre" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Accès libre
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="ouvertureSaisonniere" name="ouverture_saisonniere" class="checkbox-input">
+                                <span class="checkbox-custom"></span>
+                                Ouverture saisonnière
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Section Observations -->
+                <fieldset class="form-section">
+                    <legend class="section-legend">
+                        <i class="icon-edit"></i>
+                        Observations
+                    </legend>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="equipObs" class="form-label">Observations équipement</label>
+                            <textarea 
+                                id="equipObs" 
+                                name="equip_obs" 
+                                class="form-textarea" 
+                                rows="4"
+                                placeholder="Informations complémentaires sur l'équipement..."
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="instObs" class="form-label">Observations installation</label>
+                            <textarea 
+                                id="instObs" 
+                                name="inst_obs" 
+                                class="form-textarea" 
+                                rows="4"
+                                placeholder="Informations complémentaires sur l'installation..."
+                            ></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Boutons d'action -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                        <i class="icon-save"></i>
+                        Enregistrer l'équipement
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">
+                        <i class="icon-x"></i>
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Équipements Sportifs</h4>
+                    <p class="footer-description">
+                        Plateforme nationale de gestion des équipements sportifs français.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Liens utiles</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="carte.html">Carte</a></li>
+                        <li><a href="equipements.html">Équipements</a></li>
+                        <li><a href="connexion.html">Connexion</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@equipements-sportifs.fr">Contact</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Équipements Sportifs France. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

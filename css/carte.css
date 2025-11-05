@@ -1,0 +1,681 @@
+/* ===================================
+   STYLES CARTE INTERACTIVE
+   Équipements Sportifs - Leaflet.js
+   ================================== */
+
+/* Variables spécifiques à la carte */
+:root {
+  --map-height: 500px;
+  --sidebar-width: 350px;
+  --sidebar-width-mobile: 100%;
+  --filters-height: auto;
+  --legend-width: 200px;
+}
+
+/* ===================================
+   CONTENEUR PRINCIPAL DE LA CARTE
+   ================================== */
+
+.map-container {
+  position: relative;
+  height: calc(100vh - 200px);
+  min-height: 500px;
+  width: 100%;
+  overflow: hidden;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===================================
+   PANNEAU DE FILTRES
+   ================================== */
+
+.map-filters {
+  background-color: var(--white);
+  border-bottom: var(--border-width) solid var(--light-gray);
+  box-shadow: var(--shadow);
+  position: relative;
+  z-index: 1000;
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg) 0;
+  border-bottom: var(--border-width) solid var(--light-gray);
+}
+
+.filters-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.filters-toggle {
+  display: none;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-fast);
+}
+
+.filters-toggle:hover {
+  background-color: var(--light-gray);
+}
+
+.filters-content {
+  padding: var(--spacing-lg) 0;
+}
+
+.filters-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--black);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.filter-input,
+.filter-select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width) solid var(--gray);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-primary);
+  transition: border-color var(--transition-fast);
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.1);
+}
+
+.checkbox-group {
+  margin-top: var(--spacing-sm);
+}
+
+.filter-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: end;
+}
+
+/* Mobile responsive pour les filtres */
+@media (max-width: 768px) {
+  .filters-toggle {
+    display: flex;
+  }
+  
+  .filters-content {
+    display: none;
+  }
+  
+  .filters-content.show {
+    display: block;
+    padding: var(--spacing-lg) 0;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ===================================
+   LÉGENDE DE LA CARTE
+   ================================== */
+
+.map-legend {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  background-color: var(--white);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  min-width: var(--legend-width);
+  max-width: 250px;
+}
+
+.legend-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+  margin-top: 0;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.legend-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Marqueurs personnalisés par type d'équipement */
+.marker-terrain {
+  background-color: var(--primary-color);
+}
+
+.marker-salle {
+  background-color: var(--secondary-color);
+}
+
+.marker-piscine {
+  background-color: var(--info-color);
+}
+
+.marker-stade {
+  background-color: var(--accent-color);
+}
+
+.marker-complexe {
+  background-color: var(--gray);
+}
+
+.marker-accessible {
+  background-color: var(--success-color);
+}
+
+.legend-label {
+  font-size: var(--font-size-sm);
+  color: var(--black);
+  font-weight: var(--font-weight-normal);
+}
+
+/* Mobile responsive pour la légende */
+@media (max-width: 768px) {
+  .map-legend {
+    position: static;
+    margin: var(--spacing-md);
+    box-shadow: var(--shadow);
+  }
+}
+
+/* ===================================
+   INFORMATIONS DE LA CARTE
+   ================================== */
+
+.map-info {
+  position: absolute;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+}
+
+.map-stats {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+.map-stat {
+  font-size: var(--font-size-sm);
+  color: var(--black);
+}
+
+.map-stat strong {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ===================================
+   PANNEAU LATÉRAL DES RÉSULTATS
+   ================================== */
+
+.map-results {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--sidebar-width);
+  height: 100%;
+  background-color: var(--white);
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
+  overflow-y: auto;
+}
+
+.map-results.show {
+  transform: translateX(0);
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  border-bottom: var(--border-width) solid var(--light-gray);
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.results-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.results-toggle {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-fast);
+}
+
+.results-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.results-content {
+  padding: var(--spacing-lg);
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.result-item {
+  background-color: var(--white);
+  border: var(--border-width) solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.result-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.result-item.selected {
+  border-color: var(--primary-color);
+  background-color: rgba(0, 85, 164, 0.05);
+}
+
+.result-name {
+  font-weight: var(--font-weight-bold);
+  color: var(--black);
+  margin-bottom: var(--spacing-xs);
+}
+
+.result-location {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+  margin-bottom: var(--spacing-xs);
+}
+
+.result-type {
+  display: inline-block;
+  background-color: var(--light-gray);
+  color: var(--primary-color);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: 2px 8px;
+  border-radius: var(--border-radius-sm);
+}
+
+.result-accessibility {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+}
+
+.accessibility-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.accessibility-badge.yes {
+  background-color: rgba(0, 169, 79, 0.1);
+  color: var(--success-color);
+}
+
+.accessibility-badge.no {
+  background-color: rgba(230, 57, 70, 0.1);
+  color: var(--error-color);
+}
+
+/* Pagination des résultats */
+.results-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: var(--border-width) solid var(--light-gray);
+}
+
+.pagination-btn {
+  background: none;
+  border: var(--border-width) solid var(--gray);
+  color: var(--gray);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-btn.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white);
+}
+
+.pagination-info {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+  margin: 0 var(--spacing-sm);
+}
+
+/* ===================================
+   BOUTON MOBILE POUR LES RÉSULTATS
+   ================================== */
+
+.results-mobile-toggle {
+  display: none;
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: var(--shadow-xl);
+  cursor: pointer;
+  z-index: 1002;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--transition-fast);
+}
+
+.results-mobile-toggle:hover {
+  background-color: var(--dark-gray);
+  transform: translateY(-2px);
+}
+
+.results-count {
+  background-color: var(--accent-color);
+  color: var(--white);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  margin-left: var(--spacing-xs);
+}
+
+/* Mobile responsive pour le panneau de résultats */
+@media (max-width: 768px) {
+  .map-results {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--sidebar-width-mobile);
+    height: 100vh;
+    z-index: 1003;
+  }
+  
+  .results-mobile-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+}
+
+/* ===================================
+   MINI CARTE POUR LES DÉTAILS
+   ================================== */
+
+.map-small {
+  height: 200px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  border: var(--border-width) solid var(--light-gray);
+}
+
+/* ===================================
+   MARKERS LEAFLET PERSONNALISÉS
+   ================================== */
+
+/* Style des markers personnalisés */
+.custom-marker {
+  border-radius: 50%;
+  border: 3px solid var(--white);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  color: var(--white);
+  font-size: 12px;
+}
+
+/* Popups Leaflet personnalisés */
+.leaflet-popup-content-wrapper {
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.popup-content {
+  padding: var(--spacing-md);
+}
+
+.popup-title {
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-base);
+}
+
+.popup-location {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+  margin-bottom: var(--spacing-sm);
+}
+
+.popup-details {
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.popup-accessibility {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: var(--border-width) solid var(--light-gray);
+  font-size: var(--font-size-xs);
+}
+
+/* ===================================
+   ÉTATS DE CHARGEMENT
+   ================================== */
+
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  color: var(--gray);
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--light-gray);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: var(--spacing-sm);
+}
+
+/* ===================================
+   ERREURS
+   ================================== */
+
+.map-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  color: var(--error-color);
+  text-align: center;
+}
+
+.map-error-icon {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+.map-error-message {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-md);
+}
+
+.map-error-help {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN CARTE
+   ================================== */
+
+/* Tablette */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .map-container {
+    height: calc(100vh - 250px);
+  }
+  
+  .map-legend {
+    position: static;
+    margin: var(--spacing-md);
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .map-container {
+    height: calc(100vh - 300px);
+    min-height: 400px;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .map-stats {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+  }
+}
+
+/* ===================================
+   ANIMATIONS
+   ================================== */
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.slide-in {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.slide-out {
+  animation: slideOutRight 0.3s ease-out;
+}

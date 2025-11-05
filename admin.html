@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Administration - Gestion des équipements sportifs">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="Logo Équipements Sportifs" class="logo">
+                    <span class="brand-name">Équipements Sportifs</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="carte.html" class="nav-link">Carte Interactive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="equipements.html" class="nav-link">Équipements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">Tableau de bord</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link active">Administration</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" id="logoutBtn">Déconnexion</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- En-tête d'administration -->
+            <div class="admin-header">
+                <div class="admin-title">
+                    <h1>Administration</h1>
+                    <p class="admin-subtitle">
+                        Gestion avancée du système et configuration
+                    </p>
+                </div>
+                <div class="admin-actions">
+                    <button class="btn btn-primary" id="backupBtn">
+                        <i class="icon-database"></i>
+                        Sauvegarde
+                    </button>
+                    <button class="btn btn-secondary" id="exportBtn">
+                        <i class="icon-download"></i>
+                        Export complet
+                    </button>
+                </div>
+            </div>
+
+            <!-- Onglets d'administration -->
+            <div class="admin-tabs">
+                <nav class="tabs-nav">
+                    <button class="tab-btn active" data-tab="overview">Vue d'ensemble</button>
+                    <button class="tab-btn" data-tab="users">Utilisateurs</button>
+                    <button class="tab-btn" data-tab="data">Données</button>
+                    <button class="tab-btn" data-tab="logs">Logs</button>
+                    <button class="tab-btn" data-tab="settings">Configuration</button>
+                </nav>
+
+                <!-- Contenu des onglets -->
+                <div class="tabs-content">
+                    <!-- Onglet Vue d'ensemble -->
+                    <div class="tab-content active" id="overview">
+                        <div class="admin-overview">
+                            <!-- Statistiques système -->
+                            <div class="system-stats">
+                                <h2 class="section-title">Statistiques du système</h2>
+                                <div class="stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="icon-database"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h3 class="stat-number" id="totalRecords">0</h3>
+                                            <p class="stat-label">Enregistrements</p>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="icon-users"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h3 class="stat-number" id="totalUsers">0</h3>
+                                            <p class="stat-label">Utilisateurs</p>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="icon-activity"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h3 class="stat-number" id="activeSessions">0</h3>
+                                            <p class="stat-label">Sessions actives</p>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">
+                                            <i class="icon-clock"></i>
+                                        </div>
+                                        <div class="stat-content">
+                                            <h3 class="stat-number" id="systemUptime">--</h3>
+                                            <p class="stat-label">Disponibilité</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activité récente -->
+                            <div class="recent-activity">
+                                <h2 class="section-title">Activité récente</h2>
+                                <div class="activity-list" id="recentActivity">
+                                    <div class="loading-placeholder">
+                                        <p>Chargement de l'activité...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Alertes système -->
+                            <div class="system-alerts">
+                                <h2 class="section-title">Alertes système</h2>
+                                <div class="alerts-list" id="systemAlerts">
+                                    <div class="no-alerts">
+                                        <i class="icon-check-circle"></i>
+                                        <p>Aucune alerte en cours</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Utilisateurs -->
+                    <div class="tab-content" id="users">
+                        <div class="users-management">
+                            <div class="section-header">
+                                <h2 class="section-title">Gestion des utilisateurs</h2>
+                                <button class="btn btn-primary" id="addUserBtn">
+                                    <i class="icon-user-plus"></i>
+                                    Nouvel utilisateur
+                                </button>
+                            </div>
+
+                            <!-- Filtres utilisateurs -->
+                            <div class="users-filters">
+                                <div class="filters-row">
+                                    <div class="filter-item">
+                                        <input 
+                                            type="text" 
+                                            id="userSearch" 
+                                            class="filter-input" 
+                                            placeholder="Rechercher un utilisateur..."
+                                        >
+                                    </div>
+                                    <div class="filter-item">
+                                        <select id="userRoleFilter" class="filter-select">
+                                            <option value="">Tous les rôles</option>
+                                            <option value="admin">Administrateur</option>
+                                            <option value="manager">Gestionnaire</option>
+                                            <option value="user">Utilisateur</option>
+                                        </select>
+                                    </div>
+                                    <div class="filter-item">
+                                        <select id="userStatusFilter" class="filter-select">
+                                            <option value="">Tous les statuts</option>
+                                            <option value="active">Actif</option>
+                                            <option value="inactive">Inactif</option>
+                                            <option value="suspended">Suspendu</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Liste des utilisateurs -->
+                            <div class="users-table-container">
+                                <table class="users-table" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Email</th>
+                                            <th>Rôle</th>
+                                            <th>Statut</th>
+                                            <th>Dernière connexion</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Les utilisateurs seront chargés dynamiquement -->
+                                        <tr>
+                                            <td colspan="6" class="loading-placeholder">
+                                                Chargement des utilisateurs...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Données -->
+                    <div class="tab-content" id="data">
+                        <div class="data-management">
+                            <h2 class="section-title">Gestion des données</h2>
+                            
+                            <!-- Import/Export -->
+                            <div class="data-section">
+                                <h3 class="subsection-title">Import/Export</h3>
+                                <div class="data-actions">
+                                    <div class="data-action">
+                                        <h4>Import de données</h4>
+                                        <p>Importer des équipements depuis un fichier CSV</p>
+                                        <input type="file" id="csvImport" accept=".csv" style="display: none;">
+                                        <button class="btn btn-secondary" id="importBtn">
+                                            <i class="icon-upload"></i>
+                                            Importer CSV
+                                        </button>
+                                    </div>
+                                    <div class="data-action">
+                                        <h4>Export de données</h4>
+                                        <p>Exporter tous les équipements en CSV</p>
+                                        <button class="btn btn-secondary" id="exportCsvBtn">
+                                            <i class="icon-download"></i>
+                                            Exporter CSV
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Maintenance -->
+                            <div class="data-section">
+                                <h3 class="subsection-title">Maintenance</h3>
+                                <div class="data-actions">
+                                    <div class="data-action">
+                                        <h4>Nettoyage des données</h4>
+                                        <p>Supprimer les doublons et corriger les erreurs</p>
+                                        <button class="btn btn-warning" id="cleanDataBtn">
+                                            <i class="icon-broom"></i>
+                                            Nettoyer
+                                        </button>
+                                    </div>
+                                    <div class="data-action">
+                                        <h4>Reindexation</h4>
+                                        <p>Réindexer la base de données pour améliorer les performances</p>
+                                        <button class="btn btn-warning" id="reindexBtn">
+                                            <i class="icon-refresh"></i>
+                                            Réindexer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistiques détaillées -->
+                            <div class="data-section">
+                                <h3 class="subsection-title">Statistiques détaillées</h3>
+                                <div class="data-stats" id="dataStats">
+                                    <div class="loading-placeholder">
+                                        <p>Calcul des statistiques...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Logs -->
+                    <div class="tab-content" id="logs">
+                        <div class="logs-management">
+                            <div class="section-header">
+                                <h2 class="section-title">Logs système</h2>
+                                <div class="logs-filters">
+                                    <select id="logLevelFilter" class="filter-select">
+                                        <option value="">Tous les niveaux</option>
+                                        <option value="error">Erreur</option>
+                                        <option value="warning">Avertissement</option>
+                                        <option value="info">Information</option>
+                                        <option value="debug">Débogage</option>
+                                    </select>
+                                    <input 
+                                        type="date" 
+                                        id="logDateFilter" 
+                                        class="filter-input"
+                                    >
+                                    <button class="btn btn-secondary" id="clearLogsBtn">
+                                        <i class="icon-trash"></i>
+                                        Vider les logs
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="logs-container">
+                                <div class="logs-list" id="logsList">
+                                    <div class="loading-placeholder">
+                                        <p>Chargement des logs...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Configuration -->
+                    <div class="tab-content" id="settings">
+                        <div class="settings-management">
+                            <h2 class="section-title">Configuration du système</h2>
+                            
+                            <!-- Configuration générale -->
+                            <div class="settings-section">
+                                <h3 class="subsection-title">Configuration générale</h3>
+                                <form class="settings-form" id="generalSettings">
+                                    <div class="form-group">
+                                        <label for="siteName" class="form-label">Nom du site</label>
+                                        <input 
+                                            type="text" 
+                                            id="siteName" 
+                                            class="form-input" 
+                                            value="Équipements Sportifs France"
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="siteDescription" class="form-label">Description</label>
+                                        <textarea 
+                                            id="siteDescription" 
+                                            class="form-textarea" 
+                                            rows="3"
+                                        >Plateforme nationale de gestion des équipements sportifs français.</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maintenanceMode" class="checkbox-label">
+                                            <input type="checkbox" id="maintenanceMode" class="checkbox-input">
+                                            <span class="checkbox-custom"></span>
+                                            Mode maintenance
+                                        </label>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Configuration Supabase -->
+                            <div class="settings-section">
+                                <h3 class="subsection-title">Base de données Supabase</h3>
+                                <form class="settings-form" id="databaseSettings">
+                                    <div class="form-group">
+                                        <label for="supabaseUrl" class="form-label">URL Supabase</label>
+                                        <input 
+                                            type="url" 
+                                            id="supabaseUrl" 
+                                            class="form-input" 
+                                            value="https://loxrfmbesnxkusdrhfvs.supabase.co"
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="connectionTest" class="form-label">Test de connexion</label>
+                                        <button type="button" class="btn btn-secondary" id="testConnection">
+                                            Tester la connexion
+                                        </button>
+                                        <span id="connectionStatus" class="status-indicator">--</span>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Sauvegarde automatique -->
+                            <div class="settings-section">
+                                <h3 class="subsection-title">Sauvegarde automatique</h3>
+                                <form class="settings-form" id="backupSettings">
+                                    <div class="form-group">
+                                        <label for="autoBackup" class="checkbox-label">
+                                            <input type="checkbox" id="autoBackup" class="checkbox-input">
+                                            <span class="checkbox-custom"></span>
+                                            Activer la sauvegarde automatique
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="backupFrequency" class="form-label">Fréquence</label>
+                                        <select id="backupFrequency" class="form-select">
+                                            <option value="daily">Quotidienne</option>
+                                            <option value="weekly">Hebdomadaire</option>
+                                            <option value="monthly">Mensuelle</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Équipements Sportifs</h4>
+                    <p class="footer-description">
+                        Plateforme nationale de gestion des équipements sportifs français.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Liens utiles</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="carte.html">Carte</a></li>
+                        <li><a href="equipements.html">Équipements</a></li>
+                        <li><a href="dashboard.html">Tableau de bord</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@equipements-sportifs.fr">Contact</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Équipements Sportifs France. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Équipements - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Liste des équipements sportifs - Gestion des équipements sportifs">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="Logo Équipements Sportifs" class="logo">
+                    <span class="brand-name">Équipements Sportifs</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="carte.html" class="nav-link">Carte Interactive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="equipements.html" class="nav-link active">Équipements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="connexion.html" class="nav-link">Connexion</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- En-tête de la page -->
+            <div class="page-header">
+                <div class="page-title">
+                    <h1>Équipements sportifs</h1>
+                    <p class="page-subtitle">
+                        Consultez et gérez la liste complète des équipements sportifs
+                    </p>
+                </div>
+                <div class="page-actions">
+                    <a href="formulaire-equipement.html" class="btn btn-primary">
+                        <i class="icon-plus"></i>
+                        Nouvel équipement
+                    </a>
+                    <button class="btn btn-secondary" id="exportBtn">
+                        <i class="icon-download"></i>
+                        Exporter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtres et recherche -->
+            <div class="equipment-filters">
+                <div class="filters-row">
+                    <!-- Recherche textuelle -->
+                    <div class="filter-item">
+                        <label for="searchEquipment" class="filter-label">Recherche</label>
+                        <input 
+                            type="text" 
+                            id="searchEquipment" 
+                            class="filter-input" 
+                            placeholder="Nom, commune, département..."
+                        >
+                    </div>
+
+                    <!-- Type d'équipement -->
+                    <div class="filter-item">
+                        <label for="typeFilter" class="filter-label">Type</label>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="">Tous les types</option>
+                            <option value="terrain_sport">Terrain de sport</option>
+                            <option value="salle_sport">Salle de sport</option>
+                            <option value="piscine">Piscine</option>
+                            <option value="stade">Stade</option>
+                            <option value="complexe_sportif">Complexe sportif</option>
+                        </select>
+                    </div>
+
+                    <!-- Départements -->
+                    <div class="filter-item">
+                        <label for="departmentFilter" class="filter-label">Département</label>
+                        <select id="departmentFilter" class="filter-select">
+                            <option value="">Tous les départements</option>
+                            <option value="75">Paris (75)</option>
+                            <option value="69">Rhône (69)</option>
+                            <option value="13">Bouches-du-Rhône (13)</option>
+                            <option value="59">Nord (59)</option>
+                            <option value="33">Gironde (33)</option>
+                        </select>
+                    </div>
+
+                    <!-- Accessibilité -->
+                    <div class="filter-item">
+                        <label for="accessibilityFilter" class="filter-label">Accessibilité</label>
+                        <select id="accessibilityFilter" class="filter-select">
+                            <option value="">Toutes</option>
+                            <option value="accessible">Accessible PMR</option>
+                            <option value="non_accessible">Non accessible PMR</option>
+                        </select>
+                    </div>
+
+                    <!-- Actions des filtres -->
+                    <div class="filter-actions">
+                        <button type="button" class="btn btn-primary" id="applyFilters">
+                            Filtrer
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="resetFilters">
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options d'affichage -->
+            <div class="equipment-options">
+                <div class="options-left">
+                    <span class="results-count">
+                        <strong id="resultsCount">0</strong> équipements trouvés
+                    </span>
+                </div>
+                <div class="options-right">
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="list" id="listView">
+                            <i class="icon-list"></i>
+                        </button>
+                        <button class="view-btn" data-view="grid" id="gridView">
+                            <i class="icon-grid"></i>
+                        </button>
+                    </div>
+                    <div class="sort-options">
+                        <label for="sortBy" class="sort-label">Trier par :</label>
+                        <select id="sortBy" class="sort-select">
+                            <option value="nom">Nom</option>
+                            <option value="commune">Commune</option>
+                            <option value="type">Type</option>
+                            <option value="departement">Département</option>
+                            <option value="accessibility">Accessibilité</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste/Grille des équipements -->
+            <div class="equipment-container">
+                <!-- Vue liste -->
+                <div class="equipment-list" id="equipmentList">
+                    <!-- Les équipements seront chargés dynamiquement -->
+                    <div class="loading-placeholder">
+                        <p>Chargement des équipements...</p>
+                    </div>
+                </div>
+
+                <!-- Vue grille (cachée par défaut) -->
+                <div class="equipment-grid" id="equipmentGrid" style="display: none;">
+                    <!-- Les équipements seront chargés dynamiquement -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="equipment-pagination" id="equipmentPagination">
+                    <!-- La pagination sera ajoutée dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Équipements Sportifs</h4>
+                    <p class="footer-description">
+                        Plateforme nationale de gestion des équipements sportifs français.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Liens utiles</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="carte.html">Carte</a></li>
+                        <li><a href="equipements.html">Équipements</a></li>
+                        <li><a href="connexion.html">Connexion</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@equipements-sportifs.fr">Contact</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Équipements Sportifs France. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
