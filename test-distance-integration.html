@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Intégration - Système de Distance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #0055A4;
+        }
+        .test-result {
+            background: #e8f5e8;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 3px solid #00A94F;
+        }
+        .test-error {
+            background: #ffe8e8;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 3px solid #E63946;
+        }
+        button {
+            background: #0055A4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #003d7a;
+        }
+        #console-output {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Test d'Intégration - Système de Distance</h1>
+    
+    <div class="test-section">
+        <h2>Tests des Fonctionnalités</h2>
+        <button onclick="testerFormuleHaversine()">📐 Test Formule Haversine</button>
+        <button onclick="testerEquipementsProches()">🎯 Test Équipements Proches</button>
+        <button onclick="testerGeolocalisation()">🌍 Test Géolocalisation</button>
+        <button onclick="executerTousTests()">🚀 Tous les Tests</button>
+        <button onclick="effacerConsole()">🗑️ Effacer Console</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Simulation Géolocalisation</h2>
+        <p>Coordonnées de test (Paris): <strong>48.8566, 2.3522</strong></p>
+        <button onclick="simulerGeolocalisation()">📍 Simuler Géolocalisation</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Équipements de Test</h2>
+        <div id="equipements-test">
+            <p>Chargement des équipements de test...</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console de Test</h2>
+        <div id="console-output">Prêt pour les tests...\n</div>
+    </div>
+
+    <!-- Scripts de test -->
+    <script src="js/distance.js"></script>
+    <script src="js/test-distance.js"></script>
+    
+    <script>
+        // Rediriger la console vers la page de test
+        const consoleOutput = document.getElementById('console-output');
+        const originalLog = console.log;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.join(' ') + '\n';
+            consoleOutput.textContent += message;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+        
+        // Données de test
+        const equipementsTest = [
+            {
+                id: 1,
+                equip_nom: 'Terrain de Tennis - Parc Monceau',
+                inst_adresse: '35 Boulevard de Courcelles',
+                commune_nom: 'Paris 17e',
+                latitude: 48.8809,
+                longitude: 2.3143,
+                densite_actuelle: 60,
+                capacite_max: 100
+            },
+            {
+                id: 2,
+                equip_nom: 'Piscine Georges Hermant',
+                inst_adresse: '17 Rue Georges Hermant',
+                commune_nom: 'Paris 19e',
+                latitude: 48.8838,
+                longitude: 2.3824,
+                densite_actuelle: 85,
+                capacite_max: 100
+            },
+            {
+                id: 3,
+                equip_nom: 'Stade Sébastien Charléty',
+                inst_adresse: '61 Avenue Pierre de Coubertin',
+                commune_nom: 'Paris 13e',
+                latitude: 48.8315,
+                longitude: 2.3522,
+                densite_actuelle: 30,
+                capacite_max: 200
+            },
+            {
+                id: 4,
+                equip_nom: 'Centre Aquatique Jacqueline Douet',
+                inst_adresse: '20 Rue Albert Thomas',
+                commune_nom: 'Paris 10e',
+                latitude: 48.8741,
+                longitude: 2.3475,
+                densite_actuelle: 75,
+                capacite_max: 150
+            }
+        ];
+        
+        // Afficher les équipements de test
+        function afficherEquipementsTest() {
+            const container = document.getElementById('equipements-test');
+            const html = equipementsTest.map(equip => {
+                const taux = calculerTauxOccupation(equip);
+                return `
+                    <div class="test-result">
+                        <strong>${equip.equip_nom}</strong><br>
+                        📍 ${equip.inst_adresse}, ${equip.commune_nom}<br>
+                        🌐 ${equip.latitude}, ${equip.longitude}<br>
+                        📊 Taux occupation: ${taux}%
+                    </div>
+                `;
+            }).join('');
+            container.innerHTML = html;
+        }
+        
+        // Tests individuels
+        function testerFormuleHaversine() {
+            console.log('🔬 TEST: Formule de Haversine');
+            
+            // Test Paris-Lyon
+            const distanceParisLyon = calculerDistanceHaversine(48.8566, 2.3522, 45.7640, 4.8357);
+            console.log(`Paris-Lyon: ${distanceParisLyon} km`);
+            
+            // Test même point
+            const distanceNulle = calculerDistanceHaversine(48.8566, 2.3522, 48.8566, 2.3522);
+            console.log(`Même point: ${distanceNulle} km`);
+            
+            // Validation
+            if (distanceParisLyon > 390 && distanceParisLyon < 395 && distanceNulle === 0) {
+                console.log('✅ Test Haversine: RÉUSSI');
+            } else {
+                console.log('❌ Test Haversine: ÉCHEC');
+            }
+        }
+        
+        function testerEquipementsProches() {
+            console.log('🎯 TEST: Équipements Proches');
+            
+            const userLat = 48.8566;  // Paris centre
+            const userLon = 2.3522;
+            
+            const proches = trouverEquipementsProches(userLat, userLon, equipementsTest, 4, false);
+            console.log(`Trouvé ${proches.length} équipements proches:`);
+            
+            proches.forEach((equip, index) => {
+                console.log(`${index + 1}. ${equip.equip_nom}: ${equip.distance} km`);
+            });
+            
+            if (proches.length === 4 && proches[0].distance <= proches[1].distance) {
+                console.log('✅ Test Équipements Proches: RÉUSSI');
+            } else {
+                console.log('❌ Test Équipements Proches: ÉCHEC');
+            }
+        }
+        
+        function testerGeolocalisation() {
+            console.log('🌍 TEST: Géolocalisation');
+            
+            if (navigator.geolocation) {
+                console.log('✅ Géolocalisation supportée par le navigateur');
+                
+                // Test avec timeout court pour éviter de attendre
+                const options = {
+                    timeout: 1000,
+                    maximumAge: 60000
+                };
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        console.log(`✅ Position obtenu: ${position.coords.latitude}, ${position.coords.longitude}`);
+                        console.log('✅ Test Géolocalisation: RÉUSSI');
+                    },
+                    (erreur) => {
+                        console.log(`⚠️ Géolocalisation échouée (attendu en test): ${erreur.message}`);
+                        console.log('✅ Test Géolocalisation: RÉUSSI (erreur attendue)');
+                    },
+                    options
+                );
+            } else {
+                console.log('❌ Géolocalisation non supportée');
+                console.log('❌ Test Géolocalisation: ÉCHEC');
+            }
+        }
+        
+        function simulerGeolocalisation() {
+            console.log('📍 SIMULATION: Géolocalisation Paris');
+            
+            const userLat = 48.8566;
+            const userLon = 2.3522;
+            
+            console.log(`Coordonnées simulées: ${userLat}, ${userLon}`);
+            
+            // Afficher les équipements proches
+            const proches = trouverEquipementsProches(userLat, userLon, equipementsTest, 5, false);
+            console.log(`🏆 Top 5 des équipements les plus proches:`);
+            
+            proches.forEach((equip, index) => {
+                const disponibilite = 100 - equip.tauxOccupation;
+                console.log(`${index + 1}. ${equip.equip_nom}`);
+                console.log(`   📏 Distance: ${equip.distance} km`);
+                console.log(`   📊 Disponibilité: ${disponibilite}%`);
+                console.log(`   📍 ${equip.commune_nom}`);
+                console.log('   ---');
+            });
+        }
+        
+        function executerTousTests() {
+            console.log('🚀 EXÉCUTION DE TOUS LES TESTS');
+            console.log('================================');
+            
+            setTimeout(() => testerFormuleHaversine(), 100);
+            setTimeout(() => testerEquipementsProches(), 500);
+            setTimeout(() => testerGeolocalisation(), 1000);
+            setTimeout(() => simulerGeolocalisation(), 1500);
+        }
+        
+        function effacerConsole() {
+            document.getElementById('console-output').textContent = 'Console effacée...\n';
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 Page de test chargée');
+            afficherEquipementsTest();
+            console.log('✅ Système de distance prêt pour les tests');
+        });
+    </script>
+</body>
+</html>

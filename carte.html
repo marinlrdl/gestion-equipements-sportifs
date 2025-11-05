@@ -116,6 +116,18 @@
                             </div>
                         </div>
 
+                        <!-- Options de proximité -->
+                        <div class="filter-group">
+                            <label class="filter-label">Options de proximité</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="prioriser-disponibilite" class="checkbox-input">
+                                    <span class="checkbox-custom"></span>
+                                    Prioriser la disponibilité
+                                </label>
+                            </div>
+                        </div>
+
                         <!-- Actions des filtres -->
                         <div class="filter-actions">
                             <button type="button" class="btn btn-primary" id="applyFilters">
@@ -123,6 +135,9 @@
                             </button>
                             <button type="button" class="btn btn-secondary" id="resetFilters">
                                 Réinitialiser
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="geolocaliserEtAfficherProches()">
+                                🌍 Équipements proches
                             </button>
                         </div>
                     </div>
@@ -252,6 +267,7 @@
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/distance.js"></script>
     <script src="js/carte.js"></script>
 </body>
 </html>

@@ -299,20 +299,7 @@ function geolocaliser() {
       
       document.body.removeChild(loadingMsg);
       
-      // Utilise la fonction de distance.js si disponible
-      if (typeof afficherEquipementsProches === 'function') {
-        afficherEquipementsProches(lat, lon);
-      } else {
-        // Fallback simple - filtrer les équipements dans un rayon de 50km
-        const equipementsProches = equipementsTous.filter(equip => {
-          if (!equip.latitude || !equip.longitude) return false;
-          const distance = calculerDistance(lat, lon, equip.latitude, equip.longitude);
-          return distance <= 50; // 50km de rayon
-        });
-        
-        afficherResultats(equipementsProches);
-        equipementsProchesCache = equipementsProches;
-      }
+      console.log(`📍 Position utilisateur: ${lat}, ${lon}`);
     },
     (erreur) => {
       console.error('Erreur géolocalisation:', erreur);
@@ -328,36 +315,77 @@ function geolocaliser() {
 }
 
 /**
- * Calcule la distance entre deux points (formule de Haversine)
+ * Géolocalise et affiche les équipements proches
  */
-function calculerDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Rayon de la Terre en km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
+function geolocaliserEtAfficherProches() {
+  if (!navigator.geolocation) {
+    alert('La géolocalisation n\'est pas supportée par votre navigateur');
+    return;
+  }
+  
+  const loadingMsg = document.createElement('div');
+  loadingMsg.style.cssText = `
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background: #00A94F; color: white; padding: 10px 20px; border-radius: 4px;
+    z-index: 10000; font-size: 14px;
+  `;
+  loadingMsg.textContent = 'Recherche des équipements proches...';
+  document.body.appendChild(loadingMsg);
+  
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      
+      // Centre la carte sur la position utilisateur
+      carte.setView([lat, lon], 12);
+      
+      // Supprimer l'ancien marqueur utilisateur s'il existe
+      document.querySelectorAll('.user-marker').forEach(el => el.remove());
+      
+      L.marker([lat, lon], {
+        icon: L.divIcon({
+          html: `<div style="background: #E63946; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); position: relative;">
+                   <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 12px; font-weight: bold;">📍</div>
+                 </div>`,
+          className: 'user-marker',
+          iconSize: [26, 26],
+          iconAnchor: [13, 13]
+        })
+      }).addTo(carte).bindPopup('Vous êtes ici').openPopup();
+      
+      document.body.removeChild(loadingMsg);
+      
+      // Afficher les équipements proches
+      afficherEquipementsProches(lat, lon);
+      
+      console.log(`🎯 Recherche d'équipements proches pour: ${lat}, ${lon}`);
+    },
+    (erreur) => {
+      console.error('Erreur géolocalisation:', erreur);
+      document.body.removeChild(loadingMsg);
+      alert('Impossible de vous géolocaliser: ' + erreur.message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 60000
+    }
+  );
 }
 
 /**
- * Affiche les équipements proches d'une position
+ * Affiche les équipements proches d'une position (utilise distance.js)
  */
-function afficherEquipementsProches(lat, lon, rayonKm = 50) {
-  equipementsProches = equipementsTous.filter(equip => {
-    if (!equip.latitude || !equip.longitude) return false;
-    const distance = calculerDistance(lat, lon, equip.latitude, equip.longitude);
-    return distance <= rayonKm;
-  });
+function afficherEquipementsProchesMap(lat, lon, rayonKm = 50) {
+  equipementsProches = filtrerEquipementsParRayon(lat, lon, equipementsTous, rayonKm);
   
   console.log(`🎯 ${equipementsProches.length} équipements proches trouvés`);
   
   // Centrer la carte sur les équipements proches
   if (equipementsProches.length > 0) {
     const group = new L.featureGroup(
-      equipementsProches.map(equip => 
+      equipementsProches.map(equip =>
         L.marker([equip.latitude, equip.longitude])
       )
     );
