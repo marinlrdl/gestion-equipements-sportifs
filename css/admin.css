@@ -779,3 +779,139 @@
 .performance-fill.error {
   background-color: var(--error-color);
 }
+
+/* ===================================
+   BADGES ET ÉTATS UTILISATEURS
+   ================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-actif {
+  background-color: rgba(0, 169, 79, 0.1);
+  color: var(--success-color);
+}
+
+.badge-inactif {
+  background-color: rgba(108, 117, 125, 0.1);
+  color: var(--gray);
+}
+
+/* ===================================
+   BOUTONS D'ACTION UTILISATEURS
+   ================================== */
+
+.users-table .actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.btn-modifier,
+.btn-toggle,
+.btn-supprimer {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-modifier {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: var(--info-color);
+}
+
+.btn-modifier:hover {
+  background-color: rgba(23, 162, 184, 0.2);
+}
+
+.btn-toggle {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: var(--warning-color);
+}
+
+.btn-toggle:hover {
+  background-color: rgba(255, 193, 7, 0.2);
+}
+
+.btn-supprimer {
+  background-color: rgba(230, 57, 70, 0.1);
+  color: var(--error-color);
+}
+
+.btn-supprimer:hover {
+  background-color: rgba(230, 57, 70, 0.2);
+}
+
+/* ===================================
+   PIED DE TABLEAU
+   ================================== */
+
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--light-gray);
+  border-top: var(--border-width) solid var(--gray);
+}
+
+.table-info {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+}
+
+.table-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* ===================================
+   RESPONSIVE TABLEAU UTILISATEURS
+   ================================== */
+
+@media (max-width: 767px) {
+  .users-table {
+    min-width: 700px;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .btn-modifier,
+  .btn-toggle,
+  .btn-supprimer {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs);
+  }
+  
+  .table-footer {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: stretch;
+  }
+  
+  .table-actions {
+    justify-content: center;
+  }
+}
