@@ -370,6 +370,125 @@
                             </div>
                         </div>
                     </section>
+                    <!-- Formulaire de contact -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-mail"></i>
+                            Contacter la collectivité gestionnaire
+                        </h2>
+                        <div class="contact-section">
+                            <div class="contact-info">
+                                <p class="contact-intro">
+                                    Vous avez des questions sur cet équipement ou souhaitez signaler un problème ? 
+                                    Contactez directement la collectivité responsable.
+                                </p>
+                                
+                                <div class="contact-equipment-info">
+                                    <h4>Équipement concerné :</h4>
+                                    <p><strong id="nom_equipement_contact">Chargement...</strong></p>
+                                    <p id="localisation_equipement_contact">Localisation...</p>
+                                </div>
+                                
+                                <div class="contact-entity-info">
+                                    <h4>Destinataire :</h4>
+                                    <div class="entity-display">
+                                        <span class="entity-label">Collectivité gestionnaire :</span>
+                                        <span id="entite_cible_display" class="entity-name">Chargement...</span>
+                                        <input type="hidden" id="entite_cible_id" name="entite_cible_id">
+                                        <input type="hidden" id="equip_id" name="equip_id">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <form id="formulaire-contact" class="contact-form">
+                                <div class="form-group">
+                                    <label for="contact_nom" class="form-label">
+                                        Nom complet <span class="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="contact_nom" 
+                                        name="contact_nom" 
+                                        class="form-control" 
+                                        required
+                                        placeholder="Votre nom et prénom"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_email" class="form-label">
+                                        Adresse email <span class="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="contact_email" 
+                                        name="contact_email" 
+                                        class="form-control" 
+                                        required
+                                        placeholder="votre@email.com"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_telephone" class="form-label">
+                                        Téléphone
+                                    </label>
+                                    <input 
+                                        type="tel" 
+                                        id="contact_telephone" 
+                                        name="contact_telephone" 
+                                        class="form-control" 
+                                        placeholder="01 23 45 67 89"
+                                    >
+                                    <small class="form-help">Optionnel - pour vous recontacter si nécessaire</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_sujet" class="form-label">
+                                        Sujet <span class="required">*</span>
+                                    </label>
+                                    <select id="contact_sujet" name="contact_sujet" class="form-control" required>
+                                        <option value="">Choisissez un sujet</option>
+                                        <option value="Information générale">Information générale</option>
+                                        <option value="Réservation">Réservation / Booking</option>
+                                        <option value="Problème technique">Problème technique</option>
+                                        <option value="Maintenance">Maintenance</option>
+                                        <option value="Accessibilité">Accessibilité PMR</option>
+                                        <option value="Horaires d'ouverture">Horaires d'ouverture</option>
+                                        <option value="Tarifs">Tarifs</option>
+                                        <option value="Autre">Autre</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_message" class="form-label">
+                                        Message <span class="required">*</span>
+                                    </label>
+                                    <textarea 
+                                        id="contact_message" 
+                                        name="contact_message" 
+                                        class="form-control" 
+                                        rows="6" 
+                                        required
+                                        placeholder="Décrivez votre demande en détail..."
+                                    ></textarea>
+                                    <small class="form-help">Minimum 10 caractères</small>
+                                </div>
+                                
+                                <div class="form-actions">
+    <script src="js/contact.js"></script>
+                                    <button type="submit" id="submitContactBtn" class="btn btn-primary">
+                                        <i class="icon-mail"></i>
+                                        Envoyer le message
+                                    </button>
+                                    <button type="reset" class="btn btn-secondary">
+                                        <i class="icon-refresh"></i>
+                                        Réinitialiser
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
                 </div>
 
                 <!-- Colonne latérale -->

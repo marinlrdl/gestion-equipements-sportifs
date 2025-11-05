@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Formulaire de Contact - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Page de test pour le formulaire de contact">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            border-left: 4px solid #0055A4;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .test-section {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-section h2 {
+            color: #0055A4;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .test-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .test-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        
+        .test-result.success {
+            background-color: rgba(0, 169, 79, 0.1);
+            border: 1px solid #00A94F;
+            color: #00A94F;
+        }
+        
+        .test-result.error {
+            background-color: rgba(230, 57, 70, 0.1);
+            border: 1px solid #E63946;
+            color: #E63946;
+        }
+        
+        .test-result.info {
+            background-color: rgba(23, 162, 184, 0.1);
+            border: 1px solid #17A2B8;
+            color: #17A2B8;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.5rem 1rem;
+            background-color: #0055A4;
+            color: white;
+            border-radius: 0.25rem;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            background-color: #003d73;
+        }
+        
+        .equipment-selector {
+            margin-bottom: 1.5rem;
+        }
+        
+        .equipment-selector label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .equipment-selector select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .test-buttons button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .test-buttons .btn-primary {
+            background-color: #0055A4;
+            color: white;
+        }
+        
+        .test-buttons .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .test-buttons .btn-danger {
+            background-color: #E63946;
+            color: white;
+        }
+        
+        .test-buttons button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Test du Système de Formulaire de Contact</h1>
+            <p>Cette page permet de tester toutes les fonctionnalités du formulaire de contact intégré dans l'application.</p>
+        </div>
+        
+        <div class="test-grid">
+            <!-- Section de test avec simulation d'équipement -->
+            <div class="test-section">
+                <h2>Test avec Équipement</h2>
+                
+                <div class="equipment-selector">
+                    <label for="test-equipment">Sélectionner un équipement de test :</label>
+                    <select id="test-equipment">
+                        <option value="TEST001">Terrain de Tennis - Paris (Mairie)</option>
+                        <option value="TEST002">Stade de Football - Lyon (Préfecture Départementale)</option>
+                        <option value="TEST003">Gymnase - Marseille (Préfecture Régionale)</option>
+                        <option value="TEST004">Piscine - Toulouse (Mairie)</option>
+                    </select>
+                </div>
+                
+                <div class="test-controls">
+                    <button id="btn-load-equipment" class="btn-primary">Charger l'Équipement</button>
+                    <button id="btn-clear-form" class="btn-secondary">Effacer le Formulaire</button>
+                    <button id="btn-fill-test-data" class="btn-secondary">Remplir Données Test</button>
+                </div>
+                
+                <div id="equipment-info" class="test-result info" style="display:none;"></div>
+                
+                <!-- Formulaire de contact -->
+                <div class="contact-section">
+                    <div class="contact-info">
+                        <p class="contact-intro">
+                            Vous avez des questions sur cet équipement ou souhaitez signaler un problème ? 
+                            Contactez directement la collectivité responsable.
+                        </p>
+                        
+                        <div class="contact-equipment-info">
+                            <h4>Équipement concerné :</h4>
+                            <p><strong id="nom_equipement_contact">Sélectionnez un équipement ci-dessus</strong></p>
+                            <p id="localisation_equipement_contact">Localisation...</p>
+                        </div>
+                        
+                        <div class="contact-entity-info">
+                            <h4>Destinataire :</h4>
+                            <div class="entity-display">
+                                <span class="entity-label">Collectivité gestionnaire :</span>
+                                <span id="entite_cible_display" class="entity-name">Chargement...</span>
+                                <input type="hidden" id="entite_cible_id" name="entite_cible_id">
+                                <input type="hidden" id="equip_id" name="equip_id">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="formulaire-contact" class="contact-form">
+                        <div class="form-group">
+                            <label for="contact_nom" class="form-label">
+                                Nom complet <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="contact_nom" 
+                                name="contact_nom" 
+                                class="form-control" 
+                                required
+                                placeholder="Votre nom et prénom"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact_email" class="form-label">
+                                Adresse email <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="email" 
+                                id="contact_email" 
+                                name="contact_email" 
+                                class="form-control" 
+                                required
+                                placeholder="votre@email.com"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact_telephone" class="form-label">
+                                Téléphone
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="contact_telephone" 
+                                name="contact_telephone" 
+                                class="form-control" 
+                                placeholder="01 23 45 67 89"
+                            >
+                            <small class="form-help">Optionnel - pour vous recontacter si nécessaire</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact_sujet" class="form-label">
+                                Sujet <span class="required">*</span>
+                            </label>
+                            <select id="contact_sujet" name="contact_sujet" class="form-control" required>
+                                <option value="">Choisissez un sujet</option>
+                                <option value="Information générale">Information générale</option>
+                                <option value="Réservation">Réservation / Booking</option>
+                                <option value="Problème technique">Problème technique</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Accessibilité">Accessibilité PMR</option>
+                                <option value="Horaires d'ouverture">Horaires d'ouverture</option>
+                                <option value="Tarifs">Tarifs</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contact_message" class="form-label">
+                                Message <span class="required">*</span>
+                            </label>
+                            <textarea 
+                                id="contact_message" 
+                                name="contact_message" 
+                                class="form-control" 
+                                rows="6" 
+                                required
+                                placeholder="Décrivez votre demande en détail..."
+                            ></textarea>
+                            <small class="form-help">Minimum 10 caractères</small>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" id="submitContactBtn" class="btn btn-primary">
+                                <i class="icon-mail"></i>
+                                Envoyer le message
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="icon-refresh"></i>
+                                Réinitialiser
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Section de tests automatisés -->
+            <div class="test-section">
+                <h2>Tests Automatisés</h2>
+                
+                <p>Tests de validation des fonctionnalités du formulaire de contact :</p>
+                
+                <div class="test-controls">
+                    <button id="btn-test-validation" class="btn-primary">Tester la Validation</button>
+                    <button id="btn-test-submit" class="btn-primary">Tester la Soumission</button>
+                    <button id="btn-test-entity" class="btn-primary">Tester Collectivité</button>
+                </div>
+                
+                <div id="test-results"></div>
+                
+                <h3 style="margin-top: 1.5rem;">Journal des Tests</h3>
+                <div id="test-log" style="max-height: 300px; overflow-y: auto; padding: 0.5rem; border: 1px solid #dee2e6; border-radius: 0.25rem; background-color: #f8f9fa; font-family: monospace;"></div>
+                
+                <div class="test-buttons">
+                    <button id="btn-clear-log" class="btn-secondary">Effacer le Journal</button>
+                    <button id="btn-export-log" class="btn-secondary">Exporter le Journal</button>
+                </div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-link">Retour à l'accueil</a>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/contact.js"></script>
+    
+    <!-- Script de test -->
+    <script>
+        // Configuration des tests
+        const TEST_CONFIG = {
+            // Simulation des équipements de test
+            equipements: {
+                'TEST001': {
+                    equip_numero: 'TEST001',
+                    equip_nom: 'Terrain de Tennis Municipal',
+                    commune_nom: 'Paris',
+                    commune_code: '75001',
+                    departement_nom: 'Paris',
+                    departement_code: '75',
+                    region_nom: 'Île-de-France',
+                    region_code: '11'
+                },
+                'TEST002': {
+                    equip_numero: 'TEST002',
+                    equip_nom: 'Stade de Football',
+                    commune_nom: 'Lyon',
+                    commune_code: '69001',
+                    departement_nom: 'Rhône',
+                    departement_code: '69',
+                    region_nom: 'Auvergne-Rhône-Alpes',
+                    region_code: '84'
+                },
+                'TEST003': {
+                    equip_numero: 'TEST003',
+                    equip_nom: 'Gymnase Jean-Macé',
+                    commune_nom: 'Marseille',
+                    commune_code: '13001',
+                    departement_nom: 'Bouches-du-Rhône',
+                    departement_code: '13',
+                    region_nom: 'Provence-Alpes-Côte d\'Azur',
+                    region_code: '93'
+                },
+                'TEST004': {
+                    equip_numero: 'TEST004',
+                    equip_nom: 'Piscine Municipale',
+                    commune_nom: 'Toulouse',
+                    commune_code: '31001',
+                    departement_nom: 'Haute-Garonne',
+                    departement_code: '31',
+                    region_nom: 'Occitanie',
+                    region_code: '76'
+                }
+            },
+            
+            // Simulation des collectivités gestionnaire
+            collectivites: {
+                'TEST001': { id: 'mairie-paris-001', nom_entite: 'Mairie de Paris', role: 'mairie' },
+                'TEST002': { id: 'pref-rhone-001', nom_entite: 'Préfecture du Rhône', role: 'prefecture_departementale' },
+                'TEST003': { id: 'pref-paca-001', nom_entite: 'Préfecture Régionale PACA', role: 'prefecture_regionale' },
+                'TEST004': { id: 'mairie-toulouse-001', nom_entite: 'Mairie de Toulouse', role: 'mairie' }
+            },
+            
+            // Données de test pour le formulaire
+            testData: {
+                nom: 'Jean Dupont',
+                email: 'jean.dupont@example.com',
+                telephone: '01 23 45 67 89',
+                sujet: 'Information générale',
+                message: 'Bonjour, je souhaite avoir des informations sur les horaires d\'ouverture de cet équipement. Merci de me répondre dans les plus brefs délais.'
+            }
+        };
+        
+        // Initialisation des tests
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestionnaires d'événements pour les boutons de contrôle
+            document.getElementById('btn-load-equipment').addEventListener('click', chargerEquipementTest);
+            document.getElementById('btn-clear-form').addEventListener('click', effacerFormulaire);
+            document.getElementById('btn-fill-test-data').addEventListener('click', remplirDonneesTest);
+            
+            // Gestionnaires d'événements pour les tests automatisés
+            document.getElementById('btn-test-validation').addEventListener('click', testerValidation);
+            document.getElementById('btn-test-submit').addEventListener('click', testerSoumission);
+            document.getElementById('btn-test-entity').addEventListener('click', testerCollectivite);
+            
+            // Gestionnaires pour le journal
+            document.getElementById('btn-clear-log').addEventListener('click', effacerJournal);
+            document.getElementById('btn-export-log').addEventListener('click', exporterJournal);
+            
+            // Journal initial
+            ajouterLog('Tests initialisés avec succès');
+        });
+        
+        // Fonctions utilitaires pour les tests
+        function ajouterLog(message, type = 'info') {
+            const logContainer = document.getElementById('test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: ${type === 'error' ? '#E63946' : type === 'success' ? '#00A94F' : '#17A2B8'};">[${timestamp}] ${message}</span>`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        function afficherResultatTest(id, message, type = 'info') {
+            const resultatElement = document.getElementById(id);
+            if (resultatElement) {
+                resultatElement.textContent = message;
+                resultatElement.className = `test-result ${type}`;
+                resultatElement.style.display = 'block';
+            }
+        }
+        
+        // Fonctions pour les tests
+        function chargerEquipementTest() {
+            const selectElement = document.getElementById('test-equipment');
+            const equipementId = selectElement.value;
+            
+            const equipement = TEST_CONFIG.equipements[equipementId];
+            const collectivite = TEST_CONFIG.collectivites[equipementId];
+            
+            if (!equipement || !collectivite) {
+                ajouterLog(`Échec du chargement de l'équipement ${equipementId}`, 'error');
+                return;
+            }
+            
+            // Pré-remplir les informations de l'équipement
+            document.getElementById('nom_equipement_contact').textContent = equipement.equip_nom;
+            document.getElementById('localisation_equipement_contact').textContent = 
+                `${equipement.commune_nom}, ${equipement.departement_nom}, ${equipement.region_nom}`;
+            document.getElementById('equip_id').value = equipement.equip_numero;
+            document.getElementById('entite_cible_id').value = collectivite.id;
+            document.getElementById('entite_cible_display').textContent = collectivite.nom_entite;
+            
+            // Afficher les détails de l'équipement
+            const equipmentInfo = document.getElementById('equipment-info');
+            equipmentInfo.innerHTML = `
+                <strong>Équipement :</strong> ${equipement.equip_nom}<br>
+                <strong>Localisation :</strong> ${equipement.commune_nom}, ${equipement.departement_nom}, ${equipement.region_nom}<br>
+                <strong>Collectivité gestionnaire :</strong> ${collectivite.nom_entite} (${collectivite.role})
+            `;
+            equipmentInfo.style.display = 'block';
+            
+            ajouterLog(`Équipement ${equipementId} chargé avec succès`);
+        }
+        
+        function effacerFormulaire() {
+            document.getElementById('formulaire-contact').reset();
+            document.getElementById('equipment-info').style.display = 'none';
+            ajouterLog('Formulaire effacé');
+        }
+        
+        function remplirDonneesTest() {
+            const form = document.getElementById('formulaire-contact');
+            form.contact_nom.value = TEST_CONFIG.testData.nom;
+            form.contact_email.value = TEST_CONFIG.testData.email;
+            form.contact_telephone.value = TEST_CONFIG.testData.telephone;
+            form.contact_sujet.value = TEST_CONFIG.testData.sujet;
+            form.contact_message.value = TEST_CONFIG.testData.message;
+            
+            ajouterLog('Données de test insérées dans le formulaire');
+        }
+        
+        function testerValidation() {
+            const form = document.getElementById('formulaire-contact');
+            
+            // Test 1: Champs vides
+            form.reset();
+            form.contact_nom.value = '';
+            form.contact_email.value = '';
+            
+            let resultat = window.ContactManager.validerChampContact(form.contact_nom);
+            if (!resultat) {
+                ajouterLog('✅ Test validation nom vide : OK');
+            } else {
+                ajouterLog('❌ Test validation nom vide : ÉCHEC', 'error');
+            }
+            
+            resultat = window.ContactManager.validerChampContact(form.contact_email);
+            if (!resultat) {
+                ajouterLog('✅ Test validation email vide : OK');
+            } else {
+                ajouterLog('❌ Test validation email vide : ÉCHEC', 'error');
+            }
+            
+            // Test 2: Email invalide
+            form.contact_email.value = 'email-invalide';
+            resultat = window.ContactManager.validerChampContact(form.contact_email);
+            if (!resultat) {
+                ajouterLog('✅ Test validation email invalide : OK');
+            } else {
+                ajouterLog('❌ Test validation email invalide : ÉCHEC', 'error');
+            }
+            
+            // Test 3: Téléphone invalide
+            form.contact_telephone.value = 'abc123';
+            resultat = window.ContactManager.validerChampContact(form.contact_telephone);
+            if (!resultat) {
+                ajouterLog('✅ Test validation téléphone invalide : OK');
+            } else {
+                ajouterLog('❌ Test validation téléphone invalide : ÉCHEC', 'error');
+            }
+            
+            // Test 4: Message trop court
+            form.contact_message.value = 'Court';
+            resultat = window.ContactManager.validerChampContact(form.contact_message);
+            if (!resultat) {
+                ajouterLog('✅ Test validation message court : OK');
+            } else {
+                ajouterLog('❌ Test validation message court : ÉCHEC', 'error');
+            }
+            
+            // Test 5: Champs valides
+            form.contact_nom.value = TEST_CONFIG.testData.nom;
+            form.contact_email.value = TEST_CONFIG.testData.email;
+            form.contact_telephone.value = TEST_CONFIG.testData.telephone;
+            form.contact_sujet.value = TEST_CONFIG.testData.sujet;
+            form.contact_message.value = TEST_CONFIG.testData.message;
+            
+            resultat = window.ContactManager.validerChampContact(form.contact_nom);
+            if (resultat) {
+                ajouterLog('✅ Test validation nom valide : OK');
+            } else {
+                ajouterLog('❌ Test validation nom valide : ÉCHEC', 'error');
+            }
+            
+            resultat = window.ContactManager.validerChampContact(form.contact_email);
+            if (resultat) {
+                ajouterLog('✅ Test validation email valide : OK');
+            } else {
+                ajouterLog('❌ Test validation email valide : ÉCHEC', 'error');
+            }
+            
+            afficherResultatTest('test-results', 'Tests de validation terminés. Vérifiez le journal pour les détails.', 'success');
+        }
+        
+        function testerSoumission() {
+            const form = document.getElementById('formulaire-contact');
+            
+            // Remplir le formulaire avec des données valides
+            form.contact_nom.value = TEST_CONFIG.testData.nom;
+            form.contact_email.value = TEST_CONFIG.testData.email;
+            form.contact_telephone.value = TEST_CONFIG.testData.telephone;
+            form.contact_sujet.value = TEST_CONFIG.testData.sujet;
+            form.contact_message.value = TEST_CONFIG.testData.message;
+            
+            // Simuler l'événement de soumission
+            const event = { preventDefault: () => {} };
+            
+            ajouterLog('Début du test de soumission');
+            
+            // Test en mode simulation (sans Supabase)
+            window.submitContactTestMode = true;
+            
+            window.ContactManager.soumettreContact(event)
+                .then(() => {
+                    ajouterLog('✅ Test soumission simulée : OK', 'success');
+                    afficherResultatTest('test-results', 'Soumission simulée réussie', 'success');
+                })
+                .catch((erreur) => {
+                    ajouterLog(`❌ Test soumission simulée : ÉCHEC - ${erreur.message}`, 'error');
+                    afficherResultatTest('test-results', `Échec de la soumission simulée: ${erreur.message}`, 'error');
+                })
+                .finally(() => {
+                    window.submitContactTestMode = false;
+                });
+        }
+        
+        function testerCollectivite() {
+            const equipementId = document.getElementById('test-equipment').value;
+            const equipement = TEST_CONFIG.equipements[equipementId];
+            
+            if (!equipement) {
+                ajouterLog(`❌ Équipement ${equipementId} non trouvé`, 'error');
+                return;
+            }
+            
+            ajouterLog(`Test de chargement de la collectivité pour ${equipementId}`);
+            
+            // Test en mode simulation
+            window.loadCollectiviteTestMode = true;
+            
+            window.ContactManager.chargerCollectiviteGestionnaire(equipement)
+                .then((collectivite) => {
+                    if (collectivite) {
+                        ajouterLog(`✅ Test chargement collectivité : OK - ${collectivite.nom_entite}`, 'success');
+                        afficherResultatTest('test-results', `Collectivité chargée: ${collectivite.nom_entite}`, 'success');
+                    } else {
+                        ajouterLog('❌ Test chargement collectivité : ÉCHEC - Aucune collectivité trouvée', 'error');
+                        afficherResultatTest('test-results', 'Aucune collectivité gestionnaire trouvée', 'error');
+                    }
+                })
+                .catch((erreur) => {
+                    ajouterLog(`❌ Test chargement collectivité : ÉCHEC - ${erreur.message}`, 'error');
+                    afficherResultatTest('test-results', `Erreur: ${erreur.message}`, 'error');
+                })
+                .finally(() => {
+                    window.loadCollectiviteTestMode = false;
+                });
+        }
+        
+        function effacerJournal() {
+            document.getElementById('test-log').innerHTML = '';
+            ajouterLog('Journal effacé');
+        }
+        
+        function exporterJournal() {
+            const logContainer = document.getElementById('test-log');
+            const logContent = logContainer.innerText;
+            const blob = new Blob([logContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `test-contact-log-${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            ajouterLog('Journal exporté');
+        }
+        
+        // Gestionnaires d'événements pour le formulaire de contact
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les event listeners pour le formulaire
+            if (window.ContactManager && window.ContactManager.initialiserEventListenersContact) {
+                window.ContactManager.initialiserEventListenersContact();
+            }
+            
+            // Ajouter un gestionnaire pour la soumission du formulaire
+            const form = document.getElementById('formulaire-contact');
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    ajouterLog('Formulaire soumis - Début du traitement');
+                    
+                    // Vérifier si on est en mode test
+                    if (window.submitContactTestMode) {
+                        // Simulation sans Supabase
+                        ajouterLog('Mode test activé - Simulation de la soumission');
+                        
+                        // Afficher un message de succès
+                        if (window.showNotification) {
+                            window.showNotification('Mode test: Message envoyé avec succès (simulation)', 'success');
+                        } else {
+                            alert('Mode test: Message envoyé avec succès (simulation)');
+                        }
+                        
+                        // Réinitialiser le formulaire
+                        form.reset();
+                        
+                        return;
+                    }
+                    
+                    // Mode normal - délégation au gestionnaire de contact
+                    if (window.ContactManager && window.ContactManager.soumettreContact) {
+                        window.ContactManager.soumettreContact(event);
+                    }
+                });
+            }
+            
+            // Ajouter un gestionnaire pour charger l'équipement
+            document.getElementById('test-equipment').addEventListener('change', function() {
+                chargerEquipementTest();
+            });
+            
+            // Ajouter un gestionnaire pour charger la collectivité gestionnaire
+            window.chargerCollectiviteGestionnaire = async function(equipement) {
+                if (window.loadCollectiviteTestMode) {
+                    // Mode test - simulation
+                    await new Promise(resolve => setTimeout(resolve, 500)); // Simulation d'un délai
+                    return TEST_CONFIG.collectivites[equipement.equip_numero] || null;
+                }
+                
+                // Mode normal - délégation au gestionnaire de contact
+                if (window.ContactManager && window.ContactManager.chargerCollectiviteGestionnaire) {
+                    return window.ContactManager.chargerCollectiviteGestionnaire(equipement);
+                }
+                
+                return null;
+            };
+        });
+    </script>
+</body>
+</html>
