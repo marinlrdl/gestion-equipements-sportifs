@@ -62,52 +62,64 @@
                     </div>
 
                     <!-- Formulaire de connexion -->
-                    <form class="auth-form" id="loginForm">
+                    <form class="auth-form" id="loginForm" novalidate>
+                        <!-- Messages d'erreur/succès -->
+                        <div id="authMessage" class="auth-message" style="display: none;"></div>
+                        
                         <div class="form-group">
                             <label for="email" class="form-label">Adresse email</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                class="form-input" 
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-input"
                                 placeholder="votre.email@collectivite.fr"
                                 required
+                                autocomplete="email"
+                                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                             >
+                            <div class="form-error" id="emailError" style="display: none;"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="password" class="form-label">Mot de passe</label>
                             <div class="password-input">
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
-                                    class="form-input" 
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="form-input"
                                     placeholder="Votre mot de passe"
                                     required
+                                    autocomplete="current-password"
+                                    minlength="6"
                                 >
-                                <button type="button" class="password-toggle" id="passwordToggle">
+                                <button type="button" class="password-toggle" id="passwordToggle" aria-label="Afficher/masquer le mot de passe">
                                     <i class="icon-eye"></i>
                                 </button>
                             </div>
+                            <div class="form-error" id="passwordError" style="display: none;"></div>
                         </div>
 
                         <div class="form-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" name="remember" class="checkbox-input">
+                                <input type="checkbox" name="remember" class="checkbox-input" id="rememberMe">
                                 <span class="checkbox-custom"></span>
                                 Se souvenir de moi
                             </label>
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-block">
-                                Se connecter
+                            <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                                <span class="btn-text">Se connecter</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <i class="icon-spinner"></i> Connexion en cours...
+                                </span>
                             </button>
                         </div>
 
                         <div class="auth-links">
-                            <a href="#" class="auth-link">Mot de passe oublié ?</a>
+                            <a href="#" class="auth-link" id="forgotPasswordLink">Mot de passe oublié ?</a>
                         </div>
                     </form>
 
@@ -189,6 +201,293 @@
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/guards.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- Script spécifique à la page de connexion -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeConnexionPage();
+        });
+        
+        function initializeConnexionPage() {
+            const auth = window.AuthModule;
+            const guards = window.RouteGuards;
+            
+            // Initialiser les guards
+            guards.init();
+            
+            // Vérifier si l'utilisateur est déjà connecté
+            if (auth.isLoggedIn()) {
+                // Rediriger vers le dashboard si déjà connecté
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // Configuration du formulaire de connexion
+            setupLoginForm();
+            
+            // Configuration du lien mot de passe oublié
+            setupForgotPassword();
+            
+            // Configuration de la validation en temps réel
+            setupRealTimeValidation();
+            
+            console.log('✅ Page de connexion initialisée');
+        }
+        
+        function setupLoginForm() {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('loginBtn');
+            const authMessage = document.getElementById('authMessage');
+            
+            // Gestion de la soumission du formulaire
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Validation avant soumission
+                if (!validateForm()) {
+                    return;
+                }
+                
+                // Afficher l'état de chargement
+                setLoadingState(true);
+                hideMessage();
+                
+                const formData = new FormData(form);
+                const email = formData.get('email');
+                const password = formData.get('password');
+                const remember = formData.get('remember');
+                
+                try {
+                    // Utiliser la nouvelle fonction seConnecter
+                    const result = await window.AuthModule.seConnecter(email, password);
+                    
+                    if (result.success) {
+                        showMessage('Connexion réussie ! Redirection en cours...', 'success');
+                        
+                        // Sauvegarder la préférence "Se souvenir de moi"
+                        if (remember) {
+                            localStorage.setItem('auth_remember', 'true');
+                        } else {
+                            localStorage.removeItem('auth_remember');
+                        }
+                        
+                        // Redirection sera gérée par la fonction seConnecter
+                    } else {
+                        throw new Error(result.error);
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Erreur de connexion:', error);
+                    
+                    let errorMessage = 'Erreur de connexion';
+                    
+                    if (error.message.includes('Invalid login credentials')) {
+                        errorMessage = 'Email ou mot de passe incorrect';
+                    } else if (error.message.includes('Email not confirmed')) {
+                        errorMessage = 'Veuillez confirmer votre email avant de vous connecter';
+                    } else if (error.message.includes('Too many requests')) {
+                        errorMessage = 'Trop de tentatives. Veuillez réessayer plus tard';
+                    } else if (error.message.includes('User not found')) {
+                        errorMessage = 'Aucun compte trouvé avec cet email';
+                    } else if (error.message.includes('Invalid password')) {
+                        errorMessage = 'Mot de passe incorrect';
+                    }
+                    
+                    showMessage(errorMessage, 'error');
+                } finally {
+                    setLoadingState(false);
+                }
+            });
+            
+            // Gestion de la touche Entrée
+            [emailInput, passwordInput].forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        form.dispatchEvent(new Event('submit'));
+                    }
+                });
+            });
+        }
+        
+        function setupForgotPassword() {
+            const forgotLink = document.getElementById('forgotPasswordLink');
+            
+            forgotLink.addEventListener('click', async function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('email').value.trim();
+                
+                if (!email) {
+                    showMessage('Veuillez d\'abord saisir votre adresse email', 'warning');
+                    document.getElementById('email').focus();
+                    return;
+                }
+                
+                // Validation email
+                if (!isValidEmail(email)) {
+                    showMessage('Veuillez saisir une adresse email valide', 'error');
+                    return;
+                }
+                
+                try {
+                    forgotLink.textContent = 'Envoi en cours...';
+                    forgotLink.style.pointerEvents = 'none';
+                    
+                    const result = await window.AuthModule.resetPassword(email);
+                    
+                    if (result.success) {
+                        showMessage('Un email de réinitialisation a été envoyé à votre adresse', 'success');
+                    } else {
+                        throw new Error(result.error);
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Erreur lors de la réinitialisation:', error);
+                    showMessage('Erreur lors de l\'envoi de l\'email de réinitialisation', 'error');
+                } finally {
+                    forgotLink.textContent = 'Mot de passe oublié ?';
+                    forgotLink.style.pointerEvents = 'auto';
+                }
+            });
+        }
+        
+        function setupRealTimeValidation() {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            
+            // Validation email en temps réel
+            emailInput.addEventListener('input', function() {
+                validateEmail();
+            });
+            
+            emailInput.addEventListener('blur', function() {
+                validateEmail();
+            });
+            
+            // Validation mot de passe en temps réel
+            passwordInput.addEventListener('input', function() {
+                validatePassword();
+            });
+            
+            passwordInput.addEventListener('blur', function() {
+                validatePassword();
+            });
+        }
+        
+        function validateForm() {
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+            
+            return isEmailValid && isPasswordValid;
+        }
+        
+        function validateEmail() {
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showFieldError(emailInput, emailError, 'L\'adresse email est requise');
+                return false;
+            }
+            
+            if (!isValidEmail(email)) {
+                showFieldError(emailInput, emailError, 'Veuillez saisir une adresse email valide');
+                return false;
+            }
+            
+            hideFieldError(emailInput, emailError);
+            return true;
+        }
+        
+        function validatePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const password = passwordInput.value;
+            
+            if (!password) {
+                showFieldError(passwordInput, passwordError, 'Le mot de passe est requis');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                showFieldError(passwordInput, passwordError, 'Le mot de passe doit contenir au moins 6 caractères');
+                return false;
+            }
+            
+            hideFieldError(passwordInput, passwordError);
+            return true;
+        }
+        
+        function showFieldError(input, errorElement, message) {
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        function hideFieldError(input, errorElement) {
+            input.classList.remove('error');
+            errorElement.style.display = 'none';
+        }
+        
+        function showMessage(message, type = 'info') {
+            const authMessage = document.getElementById('authMessage');
+            authMessage.textContent = message;
+            authMessage.className = `auth-message ${type}`;
+            authMessage.style.display = 'block';
+            
+            // Masquer automatiquement après 5 secondes pour les messages de succès
+            if (type === 'success') {
+                setTimeout(() => {
+                    hideMessage();
+                }, 5000);
+            }
+        }
+        
+        function hideMessage() {
+            const authMessage = document.getElementById('authMessage');
+            authMessage.style.display = 'none';
+        }
+        
+        function setLoadingState(isLoading) {
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = loginBtn.querySelector('.btn-text');
+            const btnLoading = loginBtn.querySelector('.btn-loading');
+            
+            if (isLoading) {
+                loginBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'inline-flex';
+            } else {
+                loginBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailRegex.test(email);
+        }
+        
+        // Gestion de la touche Échap pour fermer les messages
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideMessage();
+            }
+        });
+        
+        // Auto-focus sur le champ email au chargement
+        window.addEventListener('load', function() {
+            const emailInput = document.getElementById('email');
+            if (emailInput && !emailInput.value) {
+                emailInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
