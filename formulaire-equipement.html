@@ -55,7 +55,7 @@
             <!-- En-tête du formulaire -->
             <div class="form-header">
                 <div class="form-title">
-                    <h1 id="formTitle">Nouvel équipement</h1>
+                    <h1 id="titre-formulaire">Nouvel équipement</h1>
                     <p class="form-subtitle">
                         Remplissez les informations de l'équipement sportif
                     </p>
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Formulaire -->
-            <form class="equipment-form" id="equipmentForm">
+            <form class="equipment-form" id="equipementForm">
                 <!-- Section Identification -->
                 <fieldset class="form-section">
                     <legend class="section-legend">
@@ -78,20 +78,20 @@
                     </legend>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="equipNom" class="form-label required">Nom de l'équipement</label>
-                            <input 
-                                type="text" 
-                                id="equipNom" 
-                                name="equip_nom" 
-                                class="form-input" 
+                            <label for="equip_nom" class="form-label required">Nom de l'équipement</label>
+                            <input
+                                type="text"
+                                id="equip_nom"
+                                name="equip_nom"
+                                class="form-input"
                                 placeholder="Ex: Terrain de football communal"
                                 required
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="equipType" class="form-label required">Type d'équipement</label>
-                            <select id="equipType" name="equip_type_name" class="form-select" required>
+                            <label for="equip_type_famille" class="form-label required">Type d'équipement</label>
+                            <select id="equip_type_famille" name="equip_type_famille" class="form-select" required>
                                 <option value="">Sélectionnez un type</option>
                                 <option value="terrain_sport">Terrain de sport</option>
                                 <option value="salle_sport">Salle de sport</option>
@@ -102,26 +102,24 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="equipNature" class="form-label">Nature de l'équipement</label>
-                            <input 
-                                type="text" 
-                                id="equipNature" 
-                                name="equip_nature" 
-                                class="form-input" 
-                                placeholder="Ex: Pâte synthétique, Gazon naturel..."
+                            <label for="equip_type_name" class="form-label">Nom du type</label>
+                            <input
+                                type="text"
+                                id="equip_type_name"
+                                name="equip_type_name"
+                                class="form-input"
+                                placeholder="Ex: Terrain de football, Salle omnisports..."
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="anneeMiseService" class="form-label">Année de mise en service</label>
-                            <input 
-                                type="number" 
-                                id="anneeMiseService" 
-                                name="annee_mise_en_service" 
-                                class="form-input" 
-                                min="1900" 
-                                max="2024"
-                                placeholder="2020"
+                            <label for="equip_nature" class="form-label">Nature de l'équipement</label>
+                            <input
+                                type="text"
+                                id="equip_nature"
+                                name="equip_nature"
+                                class="form-input"
+                                placeholder="Ex: Pâte synthétique, Gazon naturel..."
                             >
                         </div>
                     </div>
@@ -135,52 +133,63 @@
                     </legend>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="instNom" class="form-label">Nom de l'installation</label>
-                            <input 
-                                type="text" 
-                                id="instNom" 
-                                name="inst_nom" 
-                                class="form-input" 
+                            <label for="inst_nom" class="form-label">Nom de l'installation</label>
+                            <input
+                                type="text"
+                                id="inst_nom"
+                                name="inst_nom"
+                                class="form-input"
                                 placeholder="Ex: Complexe sportif municipal"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="instAdresse" class="form-label">Adresse</label>
-                            <input 
-                                type="text" 
-                                id="instAdresse" 
-                                name="inst_adresse" 
-                                class="form-input" 
+                            <label for="inst_adresse" class="form-label">Adresse</label>
+                            <input
+                                type="text"
+                                id="inst_adresse"
+                                name="inst_adresse"
+                                class="form-input"
                                 placeholder="123 Rue du Sport"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="instCp" class="form-label">Code postal</label>
-                            <input 
-                                type="text" 
-                                id="instCp" 
-                                name="inst_cp" 
-                                class="form-input" 
+                            <label for="inst_cp" class="form-label">Code postal</label>
+                            <input
+                                type="text"
+                                id="inst_cp"
+                                name="inst_cp"
+                                class="form-input"
                                 placeholder="75001"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="communeNom" class="form-label">Commune</label>
-                            <input 
-                                type="text" 
-                                id="communeNom" 
-                                name="commune_nom" 
-                                class="form-input" 
+                            <label for="commune_nom" class="form-label">Commune</label>
+                            <input
+                                type="text"
+                                id="commune_nom"
+                                name="commune_nom"
+                                class="form-input"
                                 placeholder="Paris"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="departementCode" class="form-label">Département</label>
-                            <select id="departementCode" name="departement_code" class="form-select">
+                            <label for="commune_code" class="form-label">Code INSEE commune</label>
+                            <input
+                                type="text"
+                                id="commune_code"
+                                name="commune_code"
+                                class="form-input"
+                                placeholder="75101"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="departement_code" class="form-label">Département</label>
+                            <select id="departement_code" name="departement_code" class="form-select">
                                 <option value="">Sélectionnez un département</option>
                                 <option value="75">Paris (75)</option>
                                 <option value="69">Rhône (69)</option>
@@ -191,13 +200,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="regionNom" class="form-label">Région</label>
-                            <input 
-                                type="text" 
-                                id="regionNom" 
-                                name="region_nom" 
-                                class="form-input" 
-                                placeholder="Île-de-France"
+                            <label for="region_code" class="form-label">Région</label>
+                            <input
+                                type="text"
+                                id="region_code"
+                                name="region_code"
+                                class="form-input"
+                                placeholder="11"
                             >
                         </div>
                     </div>
@@ -212,33 +221,40 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="latitude" class="form-label">Latitude</label>
-                            <input 
-                                type="number" 
-                                id="latitude" 
-                                name="latitude" 
-                                class="form-input" 
+                            <input
+                                type="number"
+                                id="latitude"
+                                name="latitude"
+                                class="form-input"
                                 step="any"
                                 placeholder="48.8566"
+                                readonly
                             >
                         </div>
 
                         <div class="form-group">
                             <label for="longitude" class="form-label">Longitude</label>
-                            <input 
-                                type="number" 
-                                id="longitude" 
-                                name="longitude" 
-                                class="form-input" 
+                            <input
+                                type="number"
+                                id="longitude"
+                                name="longitude"
+                                class="form-input"
                                 step="any"
                                 placeholder="2.3522"
+                                readonly
                             >
                         </div>
 
-                        <div class="form-group full-width">
-                            <button type="button" class="btn btn-secondary" id="geolocateBtn">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" id="btn-geoloc">
                                 <i class="icon-map-pin"></i>
                                 Géolocaliser automatiquement
                             </button>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label">Sélectionnez la position sur la carte</label>
+                            <div id="mini-carte-gps" style="height: 300px; border: 1px solid #ccc; border-radius: 4px;"></div>
                         </div>
                     </div>
                 </fieldset>
@@ -251,48 +267,36 @@
                     </legend>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="aireLongueur" class="form-label">Longueur (m)</label>
-                            <input 
-                                type="number" 
-                                id="aireLongueur" 
-                                name="aire_longueur" 
-                                class="form-input" 
+                            <label for="aire_longueur" class="form-label">Longueur (m)</label>
+                            <input
+                                type="number"
+                                id="aire_longueur"
+                                name="aire_longueur"
+                                class="form-input"
                                 step="0.01"
                                 placeholder="105.00"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="aireLargeur" class="form-label">Largeur (m)</label>
-                            <input 
-                                type="number" 
-                                id="aireLargeur" 
-                                name="aire_largeur" 
-                                class="form-input" 
+                            <label for="aire_largeur" class="form-label">Largeur (m)</label>
+                            <input
+                                type="number"
+                                id="aire_largeur"
+                                name="aire_largeur"
+                                class="form-input"
                                 step="0.01"
                                 placeholder="68.00"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="aireHauteur" class="form-label">Hauteur (m)</label>
-                            <input 
-                                type="number" 
-                                id="aireHauteur" 
-                                name="aire_hauteur" 
-                                class="form-input" 
-                                step="0.01"
-                                placeholder="0.00"
-                            >
-                        </div>
-
-                        <div class="form-group">
-                            <label for="aireSurface" class="form-label">Surface (m²)</label>
-                            <input 
-                                type="number" 
-                                id="aireSurface" 
-                                name="aire_surface" 
-                                class="form-input" 
+                            <label for="aire_surface" class="form-label">Surface (m²)</label>
+                            <input
+                                type="number"
+                                id="aire_surface"
+                                name="aire_surface"
+                                class="form-input"
                                 step="0.01"
                                 placeholder="7140.00"
                             >
@@ -309,51 +313,39 @@
                     <div class="form-grid">
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="aireEclairage" name="aire_eclairage" class="checkbox-input">
+                                <input type="checkbox" id="aire_eclairage" name="aire_eclairage" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
                                 Éclairage présent
                             </label>
                         </div>
 
                         <div class="form-group">
-                            <label for="tribunePlaces" class="form-label">Places en tribune</label>
-                            <input 
-                                type="number" 
-                                id="tribunePlaces" 
-                                name="tribune_places_assises" 
-                                class="form-input" 
+                            <label for="tribune_places_assises" class="form-label">Places en tribune</label>
+                            <input
+                                type="number"
+                                id="tribune_places_assises"
+                                name="tribune_places_assises"
+                                class="form-input"
                                 min="0"
                                 placeholder="0"
                             >
                         </div>
 
                         <div class="form-group">
-                            <label for="vestiairesSportifs" class="form-label">Vestiaires sportifs</label>
-                            <input 
-                                type="number" 
-                                id="vestiairesSportifs" 
-                                name="vestiaires_sportifs_nb" 
-                                class="form-input" 
+                            <label for="vestiaires_sportifs_nb" class="form-label">Vestiaires sportifs</label>
+                            <input
+                                type="number"
+                                id="vestiaires_sportifs_nb"
+                                name="vestiaires_sportifs_nb"
+                                class="form-input"
                                 min="0"
                                 placeholder="2"
                             >
                         </div>
 
-                        <div class="form-group">
-                            <label for="vestiairesArbitres" class="form-label">Vestiaires arbitres</label>
-                            <input 
-                                type="number" 
-                                id="vestiairesArbitres" 
-                                name="vestiaires_arbitres_nb" 
-                                class="form-input" 
-                                min="0"
-                                placeholder="1"
-                            >
-                        </div>
-
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="douchesPresence" name="douches_presence" class="checkbox-input">
+                                <input type="checkbox" id="douches_presence" name="douches_presence" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
                                 Douches présentes
                             </label>
@@ -361,7 +353,7 @@
 
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="sanitairesPresence" name="sanitaires_presence" class="checkbox-input">
+                                <input type="checkbox" id="sanitaires_presence" name="sanitaires_presence" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
                                 Sanitaires présents
                             </label>
@@ -376,27 +368,9 @@
                         Accessibilité PMR
                     </legend>
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label for="accessPmrGlobal" class="form-label">Accessibilité globale</label>
-                            <select id="accessPmrGlobal" name="access_pmr_global" class="form-select">
-                                <option value="">Non renseigné</option>
-                                <option value="accessible">Accessible</option>
-                                <option value="partiellement_accessible">Partiellement accessible</option>
-                                <option value="non_accessible">Non accessible</option>
-                            </select>
-                        </div>
-
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="accessPmrAccueil" name="access_pmr_accueil" class="checkbox-input">
-                                <span class="checkbox-custom"></span>
-                                Accueil accessible
-                            </label>
-                        </div>
-
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="accessPmrAire" name="access_pmr_aire" class="checkbox-input">
+                                <input type="checkbox" id="access_pmr_aire" name="access_pmr_aire" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
                                 Aire de jeu accessible
                             </label>
@@ -404,15 +378,7 @@
 
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="accessPmrSanitaires" name="access_pmr_sanitaires" class="checkbox-input">
-                                <span class="checkbox-custom"></span>
-                                Sanitaires accessibles
-                            </label>
-                        </div>
-
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="accessPmrVestiaires" name="access_pmr_vestiaires" class="checkbox-input">
+                                <input type="checkbox" id="access_pmr_vestiaires" name="access_pmr_vestiaires" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
                                 Vestiaires accessibles
                             </label>
@@ -420,9 +386,9 @@
 
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="accessPmrDouches" name="access_pmr_douches" class="checkbox-input">
+                                <input type="checkbox" id="access_pmr_sanitaires" name="access_pmr_sanitaires" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
-                                Douches accessibles
+                                Sanitaires accessibles
                             </label>
                         </div>
                     </div>
@@ -436,8 +402,8 @@
                     </legend>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="proprietaireType" class="form-label">Type de propriétaire</label>
-                            <select id="proprietaireType" name="proprietaire_type" class="form-select">
+                            <label for="proprietaire_type" class="form-label">Type de propriétaire</label>
+                            <select id="proprietaire_type" name="proprietaire_type" class="form-select">
                                 <option value="">Sélectionnez</option>
                                 <option value="commune">Commune</option>
                                 <option value="departement">Département</option>
@@ -449,8 +415,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="gestionnaireType" class="form-label">Type de gestionnaire</label>
-                            <select id="gestionnaireType" name="gestionnaire_type" class="form-select">
+                            <label for="gestionnaire_type" class="form-label">Type de gestionnaire</label>
+                            <select id="gestionnaire_type" name="gestionnaire_type" class="form-select">
                                 <option value="">Sélectionnez</option>
                                 <option value="commune">Commune</option>
                                 <option value="departement">Département</option>
@@ -463,17 +429,9 @@
 
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="equipAccesLibre" name="equip_acces_libre" class="checkbox-input">
+                                <input type="checkbox" id="equip_acces_libre" name="equip_acces_libre" class="checkbox-input">
                                 <span class="checkbox-custom"></span>
                                 Accès libre
-                            </label>
-                        </div>
-
-                        <div class="form-group checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="ouvertureSaisonniere" name="ouverture_saisonniere" class="checkbox-input">
-                                <span class="checkbox-custom"></span>
-                                Ouverture saisonnière
                             </label>
                         </div>
                     </div>
@@ -486,25 +444,36 @@
                         Observations
                     </legend>
                     <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="equipObs" class="form-label">Observations équipement</label>
-                            <textarea 
-                                id="equipObs" 
-                                name="equip_obs" 
-                                class="form-textarea" 
-                                rows="4"
-                                placeholder="Informations complémentaires sur l'équipement..."
-                            ></textarea>
+                        <div class="form-group">
+                            <label for="equip_sol" class="form-label">Type de sol</label>
+                            <input
+                                type="text"
+                                id="equip_sol"
+                                name="equip_sol"
+                                class="form-input"
+                                placeholder="Ex: Gazon naturel, Synthétique..."
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="equip_url" class="form-label">Site web</label>
+                            <input
+                                type="url"
+                                id="equip_url"
+                                name="equip_url"
+                                class="form-input"
+                                placeholder="https://..."
+                            >
                         </div>
 
                         <div class="form-group full-width">
-                            <label for="instObs" class="form-label">Observations installation</label>
-                            <textarea 
-                                id="instObs" 
-                                name="inst_obs" 
-                                class="form-textarea" 
+                            <label for="equip_obs" class="form-label">Observations équipement</label>
+                            <textarea
+                                id="equip_obs"
+                                name="equip_obs"
+                                class="form-textarea"
                                 rows="4"
-                                placeholder="Informations complémentaires sur l'installation..."
+                                placeholder="Informations complémentaires sur l'équipement..."
                             ></textarea>
                         </div>
                     </div>
@@ -514,9 +483,9 @@
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
                         <i class="icon-save"></i>
-                        Enregistrer l'équipement
+                        Sauvegarder
                     </button>
-                    <button type="button" class="btn btn-secondary" id="cancelBtn">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='equipements.html'">
                         <i class="icon-x"></i>
                         Annuler
                     </button>
@@ -561,10 +530,12 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <!-- Scripts JavaScript -->
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/formulaire-equipement.js"></script>
 </body>
 </html>

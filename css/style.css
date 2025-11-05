@@ -896,6 +896,337 @@ a:hover {
 }
 
 /* ===================================
+   ÉQUIPEMENTS - STYLES SPÉCIFIQUES
+   ================================== */
+
+/* Badges de densité */
+.badge-densite {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--white);
+  text-align: center;
+  min-width: 50px;
+}
+
+/* Tableau des équipements */
+.tableau-equipements {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-lg);
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.tableau-equipements th,
+.tableau-equipements td {
+  padding: var(--spacing-md);
+  text-align: left;
+  border-bottom: var(--border-width) solid var(--light-gray);
+}
+
+.tableau-equipements th {
+  background-color: var(--light-gray);
+  font-weight: var(--font-weight-semibold);
+  color: var(--black);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tableau-equipements tbody tr:hover {
+  background-color: rgba(0, 85, 164, 0.05);
+}
+
+.tableau-equipements tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Actions du tableau */
+.actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.btn-voir,
+.btn-modifier,
+.btn-supprimer {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.btn-voir {
+  background-color: var(--info-color);
+  color: var(--white);
+}
+
+.btn-voir:hover {
+  background-color: #138496;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.btn-modifier {
+  background-color: var(--warning-color);
+  color: var(--black);
+}
+
+.btn-modifier:hover {
+  background-color: #E0A800;
+  color: var(--black);
+  text-decoration: none;
+}
+
+.btn-supprimer {
+  background-color: var(--danger-color);
+  color: var(--white);
+}
+
+.btn-supprimer:hover {
+  background-color: #C9252D;
+  color: var(--white);
+  text-decoration: none;
+}
+
+/* Statistiques des équipements */
+.stats-equipements {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-equipement {
+  background-color: var(--white);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.stat-equipement .stat-number {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat-equipement .stat-label {
+  color: var(--gray);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ===================================
+   FORMULAIRE ÉQUIPEMENT - STYLES
+   ================================== */
+
+/* Sections du formulaire */
+.form-section {
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow);
+}
+
+.form-section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: var(--border-width) solid var(--light-gray);
+}
+
+/* Grille de formulaire responsive */
+.form-grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.form-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+  .form-grid-2,
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mini-carte GPS */
+.mini-carte-container {
+  margin-top: var(--spacing-md);
+}
+
+.mini-carte-gps {
+  height: 300px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  border: var(--border-width) solid var(--gray);
+  overflow: hidden;
+}
+
+.mini-carte-instructions {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+/* Champs de coordonnées */
+.coordonnees-gps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+@media (max-width: 576px) {
+  .coordonnees-gps {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Checkboxes en grille */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Messages d'aide */
+.form-help {
+  font-size: var(--font-size-sm);
+  color: var(--gray);
+  margin-top: var(--spacing-xs);
+  font-style: italic;
+}
+
+/* Validation des champs */
+.form-input:invalid,
+.form-select:invalid {
+  border-color: var(--danger-color);
+}
+
+.form-input:valid,
+.form-select:valid {
+  border-color: var(--success-color);
+}
+
+/* Boutons du formulaire */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: var(--border-width) solid var(--light-gray);
+}
+
+@media (max-width: 576px) {
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
+/* Loading states */
+.btn-loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ===================================
+   RESPONSIVE - ÉQUIPEMENTS
+   ================================== */
+
+@media (max-width: 768px) {
+  .tableau-equipements {
+    font-size: var(--font-size-sm);
+  }
+  
+  .tableau-equipements th,
+  .tableau-equipements td {
+    padding: var(--spacing-sm);
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .btn-voir,
+  .btn-modifier,
+  .btn-supprimer {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .stats-equipements {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .tableau-equipements {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .tableau-equipements th,
+  .tableau-equipements td {
+    min-width: 120px;
+  }
+}
+
+/* ===================================
    PRINT STYLES
    ================================== */
 
