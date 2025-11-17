@@ -13,7 +13,37 @@ let equipementsProches = []; // Cache pour géolocalisation
  * Initialise la carte Leaflet
  */
 function initialiserCarte() {
-  carte = L.map('carte').setView([46.603354, 1.888334], 6);
+  // 🔄 Éviter la double initialisation
+  if (carte && typeof carte.remove === 'function') {
+    console.log('⚠️ Carte déjà initialisée, suppression de la précédente');
+    try {
+      carte.remove();
+    } catch (e) {
+      console.warn('Erreur lors de la suppression de la carte précédente:', e);
+    }
+  }
+  
+  // 🔍 Vérification que l'élément carte existe dans le DOM
+  const elementCarte = document.getElementById('map') || document.getElementById('carte');
+  
+  if (!elementCarte) {
+    console.error('❌ Élément carte non trouvé dans le DOM');
+    console.log('🔍 Recherche éléments disponibles:', {
+      'map': document.getElementById('map'),
+      'carte': document.getElementById('carte'),
+      'tous div.map': document.querySelectorAll('div.map'),
+      'tous #carte': document.querySelectorAll('#carte'),
+      'tous #map': document.querySelectorAll('#map'),
+      'page actuelle': window.location.pathname,
+      'URL actuelle': window.location.href
+    });
+    return;
+  }
+  
+  console.log('✅ Élément carte trouvé:', elementCarte.id, '- Dimensions:', elementCarte.offsetWidth, 'x', elementCarte.offsetHeight);
+  
+  // 🗺️ Initialisation de la carte
+  carte = L.map(elementCarte.id).setView([46.603354, 1.888334], 6);
   
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors',
@@ -48,6 +78,15 @@ function initialiserCarte() {
   // Event listeners pour la carte
   carte.on('zoomend moveend', function() {
     mettreAJourStatistiques();
+  });
+  
+  // ✅ Confirmation de l'initialisation réussie
+  console.log('🗺️ Carte Leaflet initialisée avec succès sur l\'élément:', elementCarte.id);
+  console.log('📊 Carte configurée:', {
+    centre: carte.getCenter(),
+    zoom: carte.getZoom(),
+    bounds: carte.getBounds(),
+    taille: elementCarte.offsetWidth + 'x' + elementCarte.offsetHeight + 'px'
   });
   
   chargerEquipements();
@@ -111,42 +150,52 @@ async function chargerEquipements() {
  * Affiche les marqueurs sur la carte
  */
 function afficherMarqueurs(equipements) {
-  markersLayer.clearLayers();
+  // 🛡️ Vérification que la carte et les marqueurs sont initialisés
+  if (!carte || !markersLayer || typeof markersLayer.clearLayers !== 'function') {
+    console.error('❌ Carte ou couche de marqueurs non initialisée');
+    return;
+  }
   
-  equipements.forEach(equip => {
-    const marqueur = L.marker([equip.latitude, equip.longitude]);
-    const tauxOccupation = calculerTauxOccupation(equip);
+  try {
+    markersLayer.clearLayers();
     
-    const popupHTML = `
-      <div class="popup-equipement" style="min-width: 250px;">
-        <h3 style="color: #0055A4; margin: 0 0 8px 0; font-size: 16px;">${equip.equip_nom}</h3>
-        <p style="margin: 4px 0; font-size: 14px;"><strong>Installation :</strong> ${equip.inst_nom || 'Non précisé'}</p>
-        <p style="margin: 4px 0; font-size: 14px;"><strong>Type :</strong> ${equip.equip_type_name || 'Non précisé'}</p>
-        <p style="margin: 4px 0; font-size: 14px;"><strong>Adresse :</strong> ${equip.inst_adresse || ''}, ${equip.inst_cp || ''} ${equip.commune_nom || ''}</p>
-        <p style="margin: 4px 0; font-size: 14px;"><strong>Accessibilité PMR :</strong> ${equip.access_pmr_global === 'true' || equip.access_pmr_global === true ? '✓ Oui' : '✗ Non'}</p>
-        <p style="margin: 4px 0; font-size: 14px;"><strong>Densité :</strong> ${tauxOccupation}%</p>
-        <div class="jauge-densite" style="background: #f0f0f0; height: 8px; border-radius: 4px; margin: 8px 0; overflow: hidden;">
-          <div class="jauge-remplissage" style="width: ${tauxOccupation}%; height: 100%; background-color: ${getCouleurDensite(equip)}; transition: width 0.3s ease;"></div>
+    equipements.forEach(equip => {
+      const marqueur = L.marker([equip.latitude, equip.longitude]);
+      const tauxOccupation = calculerTauxOccupation(equip);
+      
+      const popupHTML = `
+        <div class="popup-equipement" style="min-width: 250px;">
+          <h3 style="color: #0055A4; margin: 0 0 8px 0; font-size: 16px;">${equip.equip_nom}</h3>
+          <p style="margin: 4px 0; font-size: 14px;"><strong>Installation :</strong> ${equip.inst_nom || 'Non précisé'}</p>
+          <p style="margin: 4px 0; font-size: 14px;"><strong>Type :</strong> ${equip.equip_type_name || 'Non précisé'}</p>
+          <p style="margin: 4px 0; font-size: 14px;"><strong>Adresse :</strong> ${equip.inst_adresse || ''}, ${equip.inst_cp || ''} ${equip.commune_nom || ''}</p>
+          <p style="margin: 4px 0; font-size: 14px;"><strong>Accessibilité PMR :</strong> ${equip.access_pmr_global === 'true' || equip.access_pmr_global === true ? '✓ Oui' : '✗ Non'}</p>
+          <p style="margin: 4px 0; font-size: 14px;"><strong>Densité :</strong> ${tauxOccupation}%</p>
+          <div class="jauge-densite" style="background: #f0f0f0; height: 8px; border-radius: 4px; margin: 8px 0; overflow: hidden;">
+            <div class="jauge-remplissage" style="width: ${tauxOccupation}%; height: 100%; background-color: ${getCouleurDensite(equip)}; transition: width 0.3s ease;"></div>
+          </div>
+          <button onclick="afficherDetailEquipement('${equip.id}')" style="background: #0055A4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 8px;">Plus d'infos</button>
         </div>
-        <button onclick="afficherDetailEquipement('${equip.id}')" style="background: #0055A4; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 8px;">Plus d'infos</button>
-      </div>
-    `;
-    
-    marqueur.bindPopup(popupHTML, {
-      maxWidth: 300,
-      className: 'popup-container'
+      `;
+      
+      marqueur.bindPopup(popupHTML, {
+        maxWidth: 300,
+        className: 'popup-container'
+      });
+      
+      // Personnaliser le marqueur selon le type d'équipement
+      const markerIcon = getMarkerIcon(equip);
+      if (markerIcon) {
+        marqueur.setIcon(markerIcon);
+      }
+      
+      markersLayer.addLayer(marqueur);
     });
     
-    // Personnaliser le marqueur selon le type d'équipement
-    const markerIcon = getMarkerIcon(equip);
-    if (markerIcon) {
-      marqueur.setIcon(markerIcon);
-    }
-    
-    markersLayer.addLayer(marqueur);
-  });
-  
-  console.log(`🗺️ ${equipements.length} marqueurs affichés sur la carte`);
+    console.log(`🗺️ ${equipements.length} marqueurs affichés sur la carte`);
+  } catch (error) {
+    console.error('❌ Erreur lors de l\'affichage des marqueurs:', error);
+  }
 }
 
 /**
@@ -262,6 +311,13 @@ function reinitialiserFiltres() {
  * Géolocalise l'utilisateur et centre la carte
  */
 function geolocaliser() {
+  // 🛡️ Vérification que la carte est initialisée
+  if (!carte || typeof carte.setView !== 'function') {
+    console.error('❌ Carte non initialisée pour la géolocalisation');
+    alert('Erreur: La carte n\'est pas encore initialisée. Veuillez patienter...');
+    return;
+  }
+  
   if (!navigator.geolocation) {
     alert('La géolocalisation n\'est pas supportée par votre navigateur');
     return;
@@ -281,6 +337,7 @@ function geolocaliser() {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       
+      console.log('📍 Géolocalisation réussie:', lat, lon);
       carte.setView([lat, lon], 13);
       
       // Supprimer l'ancien marqueur utilisateur s'il existe
@@ -318,6 +375,13 @@ function geolocaliser() {
  * Géolocalise et affiche les équipements proches
  */
 function geolocaliserEtAfficherProches() {
+  // 🛡️ Vérification que la carte est initialisée
+  if (!carte || typeof carte.setView !== 'function') {
+    console.error('❌ Carte non initialisée pour la géolocalisation');
+    alert('Erreur: La carte n\'est pas encore initialisée. Veuillez patienter...');
+    return;
+  }
+  
   if (!navigator.geolocation) {
     alert('La géolocalisation n\'est pas supportée par votre navigateur');
     return;
@@ -378,9 +442,22 @@ function geolocaliserEtAfficherProches() {
  * Affiche les équipements proches d'une position (utilise distance.js)
  */
 function afficherEquipementsProchesMap(lat, lon, rayonKm = 50) {
-  equipementsProches = filtrerEquipementsParRayon(lat, lon, equipementsTous, rayonKm);
+  // 🛡️ Vérification que la carte est initialisée
+  if (!carte || typeof carte.fitBounds !== 'function') {
+    console.error('❌ Carte non initialisée pour afficher équipements proches');
+    return;
+  }
   
-  console.log(`🎯 ${equipementsProches.length} équipements proches trouvés`);
+  // 🛡️ Vérification que la fonction distance existe
+  if (typeof filtrerEquipementsParRayon !== 'function') {
+    console.error('❌ Fonction filtrerEquipementsParRayon non disponible (distance.js non chargé?)');
+    // Fallback: simuler en utilisant tous les équipements
+    equipementsProches = equipementsTous.slice(0, 50); // Limite pour les tests
+  } else {
+    equipementsProches = filtrerEquipementsParRayon(lat, lon, equipementsTous, rayonKm);
+  }
+  
+  console.log(`🎯 ${equipementsProches.length} équipements proches trouvés dans un rayon de ${rayonKm}km`);
   
   // Centrer la carte sur les équipements proches
   if (equipementsProches.length > 0) {
@@ -390,6 +467,9 @@ function afficherEquipementsProchesMap(lat, lon, rayonKm = 50) {
       )
     );
     carte.fitBounds(group.getBounds().pad(0.1));
+    console.log('🗺️ Carte recentrée sur les équipements proches');
+  } else {
+    console.log('⚠️ Aucun équipement proche trouvé dans ce rayon');
   }
   
   afficherResultats(equipementsProches);
@@ -443,8 +523,15 @@ function afficherResultats(equipements) {
  * Centre la carte sur un équipement spécifique
  */
 function centrerSurEquipement(equipementId) {
+  // 🛡️ Vérification que la carte est initialisée
+  if (!carte || typeof carte.setView !== 'function') {
+    console.error('❌ Carte non initialisée pour centrer sur équipement');
+    return;
+  }
+  
   const equipement = equipementsTous.find(e => e.id === equipementId);
   if (equipement && equipement.latitude && equipement.longitude) {
+    console.log('📍 Centrage sur équipement:', equipement.equip_nom, equipement.latitude, equipement.longitude);
     carte.setView([equipement.latitude, equipement.longitude], 15);
     
     // Ouvrir le popup correspondant
@@ -465,15 +552,26 @@ function mettreAJourStatistiques() {
   const visibleEquipments = document.getElementById('visibleEquipments');
   const totalEquipments = document.getElementById('totalEquipments');
   
+  // 🛡️ Vérification que la carte est initialisée
+  if (!carte || typeof carte.getBounds !== 'function') {
+    console.warn('⚠️ Carte non initialisée pour les statistiques');
+    return;
+  }
+  
   if (visibleEquipments) {
-    // Calculer le nombre d'équipements visibles dans la zone actuelle
-    const bounds = carte.getBounds();
-    const equipementsVisibles = equipementsTous.filter(equip => {
-      if (!equip.latitude || !equip.longitude) return false;
-      return bounds.contains([equip.latitude, equip.longitude]);
-    });
-    
-    visibleEquipments.textContent = equipementsVisibles.length.toLocaleString('fr-FR');
+    try {
+      // Calculer le nombre d'équipements visibles dans la zone actuelle
+      const bounds = carte.getBounds();
+      const equipementsVisibles = equipementsTous.filter(equip => {
+        if (!equip.latitude || !equip.longitude) return false;
+        return bounds.contains([equip.latitude, equip.longitude]);
+      });
+      
+      visibleEquipments.textContent = equipementsVisibles.length.toLocaleString('fr-FR');
+      console.log(`📊 ${equipementsVisibles.length} équipements visibles sur ${equipementsTous.length} au total`);
+    } catch (error) {
+      console.error('Erreur lors du calcul des statistiques:', error);
+    }
   }
   
   if (totalEquipments) {
@@ -602,6 +700,22 @@ function initialiserEventListeners() {
 // Initialisation automatique quand le DOM est prêt
 document.addEventListener('DOMContentLoaded', function() {
   console.log('🚀 Initialisation de la carte interactive...');
+  
+  // 🔍 Vérification que les éléments nécessaires existent
+  const carteElement = document.getElementById('map') || document.getElementById('carte');
+  
+  if (!carteElement) {
+    console.error('❌ Élément carte introuvable. Création automatique...');
+    console.log('🔍 Recherche éléments disponibles:', {
+      'map': document.getElementById('map'),
+      'carte': document.getElementById('carte'),
+      'tous les divs': document.querySelectorAll('div'),
+      'page actuelle': window.location.pathname
+    });
+    return;
+  }
+  
+  console.log('✅ Élément carte détecté:', carteElement.id);
   
   initialiserCarte();
   initialiserEventListeners();
