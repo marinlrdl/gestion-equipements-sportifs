@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - CRUD Équipements</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .test-section {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+        .test-success { background: #d4edda; color: #155724; }
+        .test-error { background: #f8d7da; color: #721c24; }
+        .test-info { background: #cce7ff; color: #004085; }
+        .test-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .status-ok { background: #00A94F; color: white; }
+        .status-error { background: #E63946; color: white; }
+        .status-warning { background: #FFC107; color: black; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <h1 class="section-title">🧪 Test - Système CRUD Équipements</h1>
+            
+            <div class="test-container">
+                <!-- Test Configuration -->
+                <div class="test-section">
+                    <h3>📋 Configuration</h3>
+                    <div id="config-test">
+                        <div class="test-result test-info">
+                            <strong>Supabase URL:</strong> <span id="supabase-url"></span>
+                            <span class="test-status status-warning" id="config-status">En cours...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Scripts Loading -->
+                <div class="test-section">
+                    <h3>📜 Chargement des Scripts</h3>
+                    <div id="scripts-test">
+                        <div class="test-result test-info">
+                            <strong>Config.js:</strong> <span class="test-status status-warning" id="config-status">Chargement...</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Utils.js:</strong> <span class="test-status status-warning" id="utils-status">Chargement...</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Auth.js:</strong> <span class="test-status status-warning" id="auth-status">Chargement...</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Equipements.js:</strong> <span class="test-status status-warning" id="equipements-status">Chargement...</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Formulaire.js:</strong> <span class="test-status status-warning" id="formulaire-status">Chargement...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Auth System -->
+                <div class="test-section">
+                    <h3>🔐 Système d'Authentification</h3>
+                    <div id="auth-test">
+                        <div class="test-result test-info">
+                            <strong>AuthModule disponible:</strong> <span class="test-status status-warning" id="auth-module-status">Test en cours...</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Utilisateur connecté:</strong> <span id="user-status">Non connecté</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Permissions -->
+                <div class="test-section">
+                    <h3>🛡️ Système de Permissions</h3>
+                    <div id="permissions-test">
+                        <div class="test-result test-info">
+                            <strong>Admin:</strong> <span id="admin-permission">Non testé</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Gestionnaire:</strong> <span id="manager-permission">Non testé</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Mairie:</strong> <span id="mairie-permission">Non testé</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test CRUD Functions -->
+                <div class="test-section">
+                    <h3>⚙️ Fonctions CRUD</h3>
+                    <div id="crud-test">
+                        <div class="test-result test-info">
+                            <strong>initialiserPageEquipements:</strong> <span id="crud-init-status">Non testé</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>chargerEquipementsCollectivite:</strong> <span id="crud-load-status">Non testé</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>afficherTableauEquipements:</strong> <span id="crud-display-status">Non testé</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Form Functions -->
+                <div class="test-section">
+                    <h3>📝 Fonctions Formulaire</h3>
+                    <div id="form-test">
+                        <div class="test-result test-info">
+                            <strong>initialiserFormulaire:</strong> <span id="form-init-status">Non testé</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>initialiserCarteMini:</strong> <span id="form-map-status">Non testé</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>calculerCapaciteMax:</strong> <span id="form-capacity-status">Non testé</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Links -->
+                <div class="test-section">
+                    <h3>🔗 Navigation</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="equipements.html" class="btn btn-primary">Page Équipements</a>
+                        <a href="formulaire-equipement.html" class="btn btn-secondary">Formulaire Équipement</a>
+                        <a href="connexion.html" class="btn btn-info">Connexion</a>
+                        <a href="carte.html" class="btn btn-success">Carte Interactive</a>
+                    </div>
+                </div>
+
+                <!-- Summary -->
+                <div class="test-section">
+                    <h3>📊 Résumé</h3>
+                    <div id="test-summary">
+                        <div class="test-result test-info">
+                            <strong>Tests réussis:</strong> <span id="success-count">0</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Tests échoués:</strong> <span id="error-count">0</span>
+                        </div>
+                        <div class="test-result test-info">
+                            <strong>Statut global:</strong> <span id="global-status" class="test-status status-warning">En cours...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/equipements.js"></script>
+    <script src="js/formulaire-equipement.js"></script>
+
+    <script>
+        let testResults = {
+            success: 0,
+            errors: 0
+        };
+
+        function updateStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+
+            let className, statusText;
+            switch(status) {
+                case 'success':
+                    className = 'test-success';
+                    statusText = '✅ ' + message;
+                    testResults.success++;
+                    break;
+                case 'error':
+                    className = 'test-error';
+                    statusText = '❌ ' + message;
+                    testResults.errors++;
+                    break;
+                case 'warning':
+                    className = 'test-info';
+                    statusText = '⚠️ ' + message;
+                    break;
+                default:
+                    className = 'test-info';
+                    statusText = message;
+            }
+
+            element.className = `test-result ${className}`;
+            element.innerHTML = statusText;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            document.getElementById('success-count').textContent = testResults.success;
+            document.getElementById('error-count').textContent = testResults.errors;
+            
+            const globalStatus = document.getElementById('global-status');
+            if (testResults.errors === 0 && testResults.success > 0) {
+                globalStatus.textContent = '✅ Tous les tests réussis';
+                globalStatus.className = 'test-status status-ok';
+            } else if (testResults.errors > 0) {
+                globalStatus.textContent = '❌ Des tests ont échoué';
+                globalStatus.className = 'test-status status-error';
+            }
+        }
+
+        async function runTests() {
+            console.log('🧪 Début des tests CRUD Équipements...');
+
+            // Test Configuration
+            try {
+                if (window.AppConfig) {
+                    document.getElementById('supabase-url').textContent = window.AppConfig.SUPABASE_URL || 'Non configuré';
+                    updateStatus('config-status', 'success', 'Configuration chargée');
+                } else {
+                    updateStatus('config-status', 'error', 'AppConfig non disponible');
+                }
+            } catch (error) {
+                updateStatus('config-status', 'error', 'Erreur config: ' + error.message);
+            }
+
+            // Test Scripts Loading
+            const scripts = ['config.js', 'utils.js', 'auth.js', 'equipements.js', 'formulaire-equipement.js'];
+            const scriptStatuses = ['config-status', 'utils-status', 'auth-status', 'equipements-status', 'formulaire-status'];
+            
+            scripts.forEach((script, index) => {
+                if (window.Utils && script === 'utils.js') {
+                    updateStatus(scriptStatuses[index], 'success', 'Script chargé');
+                } else if (window.AuthModule && script === 'auth.js') {
+                    updateStatus(scriptStatuses[index], 'success', 'Script chargé');
+                } else {
+                    updateStatus(scriptStatuses[index], 'warning', 'Script présent');
+                }
+            });
+
+            // Test Auth System
+            try {
+                if (window.AuthModule) {
+                    updateStatus('auth-module-status', 'success', 'AuthModule disponible');
+                    
+                    const user = await window.AuthModule.obtenirUtilisateurConnecte();
+                    if (user) {
+                        document.getElementById('user-status').textContent = `${user.email} (${user.role || 'Role non défini'})`;
+                        updateStatus('auth-module-status', 'success', 'Utilisateur récupéré');
+                    } else {
+                        document.getElementById('user-status').textContent = 'Non connecté';
+                        updateStatus('auth-module-status', 'warning', 'Utilisateur non connecté');
+                    }
+                } else {
+                    updateStatus('auth-module-status', 'error', 'AuthModule non disponible');
+                }
+            } catch (error) {
+                updateStatus('auth-module-status', 'error', 'Erreur auth: ' + error.message);
+            }
+
+            // Test Permissions
+            try {
+                if (window.AuthModule) {
+                    updateStatus('admin-permission', window.AuthModule.isAdmin() ? 'success' : 'warning', 
+                        window.AuthModule.isAdmin() ? 'Admin détecté' : 'Admin non détecté');
+                    updateStatus('manager-permission', window.AuthModule.isManager() ? 'success' : 'warning', 
+                        window.AuthModule.isManager() ? 'Gestionnaire détecté' : 'Gestionnaire non détecté');
+                    updateStatus('mairie-permission', window.AuthModule.isMairie() ? 'success' : 'warning', 
+                        window.AuthModule.isMairie() ? 'Mairie détectée' : 'Mairie non détectée');
+                } else {
+                    updateStatus('admin-permission', 'error', 'AuthModule non disponible');
+                }
+            } catch (error) {
+                updateStatus('admin-permission', 'error', 'Erreur permissions: ' + error.message);
+            }
+
+            // Test CRUD Functions
+            try {
+                if (typeof window.initialiserPageEquipements === 'function') {
+                    updateStatus('crud-init-status', 'success', 'Fonction disponible');
+                } else {
+                    updateStatus('crud-init-status', 'warning', 'Fonction non trouvée');
+                }
+
+                if (typeof window.chargerEquipementsCollectivite === 'function') {
+                    updateStatus('crud-load-status', 'success', 'Fonction disponible');
+                } else {
+                    updateStatus('crud-load-status', 'warning', 'Fonction non trouvée');
+                }
+
+                if (typeof window.afficherTableauEquipements === 'function') {
+                    updateStatus('crud-display-status', 'success', 'Fonction disponible');
+                } else {
+                    updateStatus('crud-display-status', 'warning', 'Fonction non trouvée');
+                }
+            } catch (error) {
+                updateStatus('crud-init-status', 'error', 'Erreur CRUD: ' + error.message);
+            }
+
+            // Test Form Functions
+            try {
+                if (typeof window.initialiserFormulaire === 'function') {
+                    updateStatus('form-init-status', 'success', 'Fonction disponible');
+                } else {
+                    updateStatus('form-init-status', 'warning', 'Fonction non trouvée');
+                }
+
+                if (typeof window.initialiserCarteMini === 'function') {
+                    updateStatus('form-map-status', 'success', 'Fonction disponible');
+                } else {
+                    updateStatus('form-map-status', 'warning', 'Fonction non trouvée');
+                }
+
+                if (typeof window.calculerCapaciteMax === 'function') {
+                    updateStatus('form-capacity-status', 'success', 'Fonction disponible');
+                } else {
+                    updateStatus('form-capacity-status', 'warning', 'Fonction non trouvée');
+                }
+            } catch (error) {
+                updateStatus('form-init-status', 'error', 'Erreur formulaire: ' + error.message);
+            }
+
+            console.log('🧪 Tests terminés:', testResults);
+        }
+
+        // Run tests when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(runTests, 1000); // Wait 1 second for scripts to load
+        });
+    </script>
+</body>
+</html>

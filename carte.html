@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte Interactive - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Carte interactive des équipements sportifs en France">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/carte.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="Logo Équipements Sportifs" class="logo">
+                    <span class="brand-name">Équipements Sportifs</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="carte.html" class="nav-link active">Carte Interactive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="equipements.html" class="nav-link">Équipements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="connexion.html" class="nav-link">Connexion</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <!-- Panneau de filtres -->
+        <div class="map-filters">
+            <div class="container">
+                <div class="filters-header">
+                    <h2 class="filters-title">Filtres de recherche</h2>
+                    <button class="filters-toggle" id="filtersToggle">
+                        <i class="icon-filter"></i>
+                        Filtres
+                    </button>
+                </div>
+                
+                <div class="filters-content" id="filtersContent">
+                    <div class="filters-grid">
+                        <!-- Recherche textuelle -->
+                        <div class="filter-group">
+                            <label for="searchInput" class="filter-label">Recherche</label>
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                class="filter-input" 
+                                placeholder="Nom d'équipement, commune..."
+                            >
+                        </div>
+
+                        <!-- Type d'équipement -->
+                        <div class="filter-group">
+                            <label for="equipmentType" class="filter-label">Type d'équipement</label>
+                            <select id="equipmentType" class="filter-select">
+                                <option value="">Tous les types</option>
+                                <option value="terrain_sport">Terrain de sport</option>
+                                <option value="salle_sport">Salle de sport</option>
+                                <option value="piscine">Piscine</option>
+                                <option value="stade">Stade</option>
+                                <option value="complexe_sportif">Complexe sportif</option>
+                            </select>
+                        </div>
+
+                        <!-- Département -->
+                        <div class="filter-group">
+                            <label for="departmentFilter" class="filter-label">Département</label>
+                            <select id="departmentFilter" class="filter-select">
+                                <option value="">Tous les départements</option>
+                                <option value="75">Paris (75)</option>
+                                <option value="69">Rhône (69)</option>
+                                <option value="13">Bouches-du-Rhône (13)</option>
+                                <option value="59">Nord (59)</option>
+                                <option value="33">Gironde (33)</option>
+                            </select>
+                        </div>
+
+                        <!-- Accessibilité PMR -->
+                        <div class="filter-group">
+                            <label class="filter-label">Accessibilité PMR</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="accessiblePMR" class="checkbox-input">
+                                    <span class="checkbox-custom"></span>
+                                    Accessible PMR
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Options de proximité -->
+                        <div class="filter-group">
+                            <label class="filter-label">Options de proximité</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="prioriser-disponibilite" class="checkbox-input">
+                                    <span class="checkbox-custom"></span>
+                                    Prioriser la disponibilité
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Actions des filtres -->
+                        <div class="filter-actions">
+                            <button type="button" class="btn btn-primary" id="applyFilters">
+                                Appliquer les filtres
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="resetFilters">
+                                Réinitialiser
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="geolocaliserEtAfficherProches()">
+                                🌍 Équipements proches
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conteneur de la carte -->
+        <div class="map-container">
+            <div id="map" class="map"></div>
+            
+            <!-- Bouton de géolocalisation -->
+            <button class="geolocation-btn" onclick="geolocaliser()" title="Me géolocaliser">
+                <i class="icon-location"></i>
+            </button>
+            
+            <!-- Légende de la carte -->
+            <div class="map-legend">
+                <h4 class="legend-title">Légende</h4>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-marker marker-terrain"></div>
+                        <span class="legend-label">Terrain de sport</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-marker marker-salle"></div>
+                        <span class="legend-label">Salle de sport</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-marker marker-piscine"></div>
+                        <span class="legend-label">Piscine</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-marker marker-stade"></div>
+                        <span class="legend-label">Stade</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-marker marker-accessible"></div>
+                        <span class="legend-label">Accessible PMR</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations de la carte -->
+            <div class="map-info">
+                <div class="map-stats">
+                    <span class="map-stat">
+                        <strong id="visibleEquipments">0</strong> équipements visibles
+                    </span>
+                    <span class="map-stat">
+                        <strong id="totalEquipments">333,000+</strong> au total
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panneau latéral des résultats -->
+        <div class="map-results" id="mapResults">
+            <div class="results-header">
+                <h3 class="results-title">Résultats</h3>
+                <button class="results-toggle" id="resultsToggle">
+                    <i class="icon-close"></i>
+                </button>
+            </div>
+            
+            <div class="results-content">
+                <div class="results-list" id="resultsList">
+                    <!-- Les résultats seront chargés dynamiquement -->
+                    <div class="loading-placeholder">
+                        <p>Chargement des équipements...</p>
+                    </div>
+                </div>
+                
+                <div class="results-pagination" id="resultsPagination">
+                    <!-- Pagination sera ajoutée dynamiquement -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouton pour afficher/masquer les résultats sur mobile -->
+        <button class="results-mobile-toggle" id="resultsMobileToggle">
+            <i class="icon-list"></i>
+            <span>Résultats</span>
+            <span class="results-count" id="resultsCount">0</span>
+        </button>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Équipements Sportifs</h4>
+                    <p class="footer-description">
+                        Plateforme nationale de gestion des équipements sportifs français.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Liens utiles</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="carte.html">Carte</a></li>
+                        <li><a href="equipements.html">Équipements</a></li>
+                        <li><a href="connexion.html">Connexion</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@equipements-sportifs.fr">Contact</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Équipements Sportifs France. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/distance.js"></script>
+    <script src="js/carte.js"></script>
+</body>
+</html>

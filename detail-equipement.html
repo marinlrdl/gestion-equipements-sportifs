@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Équipement - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Détail d'un équipement sportif">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/carte.css">
+    <link rel="stylesheet" href="css/photos.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="Logo Équipements Sportifs" class="logo">
+                    <span class="brand-name">Équipements Sportifs</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="carte.html" class="nav-link">Carte Interactive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="equipements.html" class="nav-link">Équipements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="connexion.html" class="nav-link">Connexion</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- En-tête de détail -->
+            <div class="detail-header">
+                <div class="detail-title">
+                    <a href="equipements.html" class="back-link">
+                        <i class="icon-arrow-left"></i>
+                        Retour à la liste
+                    </a>
+                    <h1 id="equipmentName">Chargement...</h1>
+                    <p class="detail-subtitle" id="equipmentLocation">
+                        Chargement de la localisation...
+                    </p>
+                </div>
+                <div class="detail-actions">
+                    <button class="btn btn-secondary" id="editBtn">
+                        <i class="icon-edit"></i>
+                        Modifier
+                    </button>
+                    <button class="btn btn-danger" id="deleteBtn">
+                        <i class="icon-trash"></i>
+                        Supprimer
+                    </button>
+                    <button class="btn btn-primary" id="exportBtn">
+                        <i class="icon-download"></i>
+                        Exporter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenu principal en deux colonnes -->
+            <div class="detail-content">
+                <!-- Colonne principale -->
+                <div class="detail-main">
+                    <!-- Informations générales -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-info"></i>
+                            Informations générales
+                        </h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Type d'équipement</span>
+                                <span class="info-value" id="equipmentType">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Nature</span>
+                                <span class="info-value" id="equipmentNature">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Sol</span>
+                                <span class="info-value" id="equipmentSol">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Année de mise en service</span>
+                                <span class="info-value" id="equipmentYear">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Nom de l'installation</span>
+                                <span class="info-value" id="installationName">--</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Accès libre</span>
+                                <span class="info-value" id="freeAccess">--</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Localisation -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-location"></i>
+                            Localisation
+                        </h2>
+                        <div class="location-info">
+                            <div class="address-info">
+                                <div class="info-item">
+                                    <span class="info-label">Adresse</span>
+                                    <span class="info-value" id="equipmentAddress">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Commune</span>
+                                    <span class="info-value" id="equipmentCommune">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Département</span>
+                                    <span class="info-value" id="equipmentDepartment">--</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Région</span>
+                                    <span class="info-value" id="equipmentRegion">--</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Mini carte -->
+                            <div class="mini-map">
+                                <div id="equipmentMap" class="map-small"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dimensions -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-maximize"></i>
+                            Dimensions de l'aire d'évolution
+                        </h2>
+                        <div class="dimensions-grid">
+                            <div class="dimension-item">
+                                <span class="dimension-label">Longueur</span>
+                                <span class="dimension-value" id="areaLength">--</span>
+                                <span class="dimension-unit">m</span>
+                            </div>
+                            <div class="dimension-item">
+                                <span class="dimension-label">Largeur</span>
+                                <span class="dimension-value" id="areaWidth">--</span>
+                                <span class="dimension-unit">m</span>
+                            </div>
+                            <div class="dimension-item">
+                                <span class="dimension-label">Hauteur</span>
+                                <span class="dimension-value" id="areaHeight">--</span>
+                                <span class="dimension-unit">m</span>
+                            </div>
+                            <div class="dimension-item">
+                                <span class="dimension-label">Surface</span>
+                                <span class="dimension-value" id="areaSurface">--</span>
+                                <span class="dimension-unit">m²</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Équipements et installations -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-settings"></i>
+                            Équipements et installations
+                        </h2>
+                        <div class="facilities-grid">
+                            <div class="facility-item">
+                                <span class="facility-label">Éclairage</span>
+                                <span class="facility-value" id="lighting">--</span>
+                            </div>
+                            <div class="facility-item">
+                                <span class="facility-label">Places en tribune</span>
+                                <span class="facility-value" id="tribuneSeats">--</span>
+                            </div>
+                            <div class="facility-item">
+                                <span class="facility-label">Vestiaires sportifs</span>
+                                <span class="facility-value" id="sportDressingRooms">--</span>
+                            </div>
+                            <div class="facility-item">
+                                <span class="facility-label">Vestiaires arbitres</span>
+                                <span class="facility-value" id="refereeDressingRooms">--</span>
+                            </div>
+                            <div class="facility-item">
+                                <span class="facility-label">Douches</span>
+                                <span class="facility-value" id="showers">--</span>
+                            </div>
+                            <div class="facility-item">
+                                <span class="facility-label">Sanitaires</span>
+                                <span class="facility-value" id="sanitaries">--</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Accessibilité PMR -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-accessibility"></i>
+                            Accessibilité PMR
+                        </h2>
+                        <div class="accessibility-info">
+                            <div class="accessibility-summary">
+                                <span class="accessibility-label">Accessibilité globale</span>
+                                <span class="accessibility-value" id="globalAccessibility">--</span>
+                            </div>
+                            <div class="accessibility-details">
+                                <div class="accessibility-item">
+                                    <span class="accessibility-label">Accueil</span>
+                                    <span class="accessibility-value" id="accessReception">--</span>
+                                </div>
+                                <div class="accessibility-item">
+                                    <span class="accessibility-label">Aire de jeu</span>
+                                    <span class="accessibility-value" id="accessPlayArea">--</span>
+                                </div>
+                                <div class="accessibility-item">
+                                    <span class="accessibility-label">Sanitaires</span>
+                                    <span class="accessibility-value" id="accessSanitaries">--</span>
+                                </div>
+                                <div class="accessibility-item">
+                                    <span class="accessibility-label">Vestiaires</span>
+                                    <span class="accessibility-value" id="accessDressingRooms">--</span>
+                                </div>
+                                <div class="accessibility-item">
+                                    <span class="accessibility-label">Douches</span>
+                                    <span class="accessibility-value" id="accessShowers">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Gestion -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-users"></i>
+                            Gestion
+                        </h2>
+                        <div class="management-grid">
+                            <div class="management-item">
+                                <span class="management-label">Propriétaire</span>
+                                <span class="management-value" id="ownerType">--</span>
+                            </div>
+                            <div class="management-item">
+                                <span class="management-label">Gestionnaire</span>
+                                <span class="management-value" id="managerType">--</span>
+                            </div>
+                            <div class="management-item">
+                                <span class="management-label">Ouverture saisonnière</span>
+                                <span class="management-value" id="seasonalOpening">--</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Densité en temps réel -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-users"></i>
+                            Densité et suivi en temps réel
+                        </h2>
+                        <div class="density-content">
+                            <!-- Alerte de densité -->
+                            <div id="alerte-densite" class="density-alert"></div>
+                            
+                            <!-- Contrôles de densité -->
+                            <div class="density-controls">
+                                <div class="density-display">
+                                    <div class="density-current">
+                                        <span class="density-label">Densité actuelle :</span>
+                                        <span class="density-value" id="currentDensity">0</span>
+                                        <span class="density-separator">/</span>
+                                        <span class="density-max" id="maxCapacity">0</span>
+                                        <span class="density-unit">personnes</span>
+                                    </div>
+                                    <div class="density-progress">
+                                        <div class="progress-bar" id="densityProgress" style="width: 0%;">
+                                            <span class="progress-text" id="densityPercentage">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="density-update">
+                                    <label for="densityInput" class="density-input-label">
+                                        Mettre à jour la densité :
+                                    </label>
+                                    <div class="density-input-group">
+                                        <input
+                                            type="range"
+                                            id="densityInput"
+                                            min="0"
+                                            max="100"
+                                            value="0"
+                                            class="density-slider"
+                                        >
+                                        <input
+                                            type="number"
+                                            id="densityNumber"
+                                            min="0"
+                                            max="100"
+                                            value="0"
+                                            class="density-number"
+                                        >
+                                        <button type="button" id="updateDensityBtn" class="btn btn-primary">
+                                            Mettre à jour
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Graphique de densité -->
+                            <div class="density-chart-section">
+                                <h3>Historique des densités (7 derniers jours)</h3>
+                                <div class="chart-container">
+                                    <canvas id="graphique-densite" width="800" height="400">
+                                        Votre navigateur ne supporte pas Canvas. Veuillez utiliser un navigateur moderne.
+                                    </canvas>
+                                </div>
+                                <div class="chart-actions">
+                                    <button type="button" id="refreshChartBtn" class="btn btn-secondary">
+                                        <i class="icon-refresh"></i>
+                                        Actualiser le graphique
+                                    </button>
+                                    <button type="button" id="exportDensityBtn" class="btn btn-secondary">
+                                        <i class="icon-download"></i>
+                                        Exporter les données
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Observations -->
+                    <section class="detail-section" id="observationsSection" style="display: none;">
+                        <h2 class="section-title">
+                            <i class="icon-edit"></i>
+                            Observations
+                        </h2>
+                        <div class="observations-content">
+                            <div class="observation-item" id="equipmentObservations" style="display: none;">
+                                <h4>Observations équipement</h4>
+                                <p>--</p>
+                            </div>
+                            <div class="observation-item" id="installationObservations" style="display: none;">
+                                <h4>Observations installation</h4>
+                                <p>--</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Galerie de photos -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-camera"></i>
+                            Photos de l'équipement
+                        </h2>
+                        <div id="galerie-photos" class="photos-container">
+                            <div class="loading-placeholder">
+                                <i class="icon-refresh"></i>
+                                <p>Chargement des photos...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Zone d'upload pour les utilisateurs autorisés -->
+                        <div class="photo-upload-section" id="photo-upload-section" style="display: none;">
+                            <div class="upload-header">
+                                <h3>Ajouter des photos</h3>
+                            </div>
+                            <div class="photo-upload-area" id="photo-upload-area">
+                                <input type="file" id="photo-input" multiple accept="image/*" style="display: none;">
+                                <div class="upload-content">
+                                    <i class="icon-upload"></i>
+                                    <p>Glissez vos photos ici ou <span class="upload-link">cliquez pour sélectionner</span></p>
+                                    <small>Formats acceptés : JPG, PNG, GIF (max 5MB par photo)</small>
+                                </div>
+                            </div>
+                            <div class="upload-controls">
+                                <button type="button" class="btn btn-secondary" id="btn-upload">
+                                    <i class="icon-camera"></i>
+                                    Ajouter des photos
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Formulaire de contact -->
+                    <section class="detail-section">
+                        <h2 class="section-title">
+                            <i class="icon-mail"></i>
+                            Contacter la collectivité gestionnaire
+                        </h2>
+                        <div class="contact-section">
+                            <div class="contact-info">
+                                <p class="contact-intro">
+                                    Vous avez des questions sur cet équipement ou souhaitez signaler un problème ? 
+                                    Contactez directement la collectivité responsable.
+                                </p>
+                                
+                                <div class="contact-equipment-info">
+                                    <h4>Équipement concerné :</h4>
+                                    <p><strong id="nom_equipement_contact">Chargement...</strong></p>
+                                    <p id="localisation_equipement_contact">Localisation...</p>
+                                </div>
+                                
+                                <div class="contact-entity-info">
+                                    <h4>Destinataire :</h4>
+                                    <div class="entity-display">
+                                        <span class="entity-label">Collectivité gestionnaire :</span>
+                                        <span id="entite_cible_display" class="entity-name">Chargement...</span>
+                                        <input type="hidden" id="entite_cible_id" name="entite_cible_id">
+                                        <input type="hidden" id="equip_id" name="equip_id">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <form id="formulaire-contact" class="contact-form">
+                                <div class="form-group">
+                                    <label for="contact_nom" class="form-label">
+                                        Nom complet <span class="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        id="contact_nom" 
+                                        name="contact_nom" 
+                                        class="form-control" 
+                                        required
+                                        placeholder="Votre nom et prénom"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_email" class="form-label">
+                                        Adresse email <span class="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="email" 
+                                        id="contact_email" 
+                                        name="contact_email" 
+                                        class="form-control" 
+                                        required
+                                        placeholder="votre@email.com"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_telephone" class="form-label">
+                                        Téléphone
+                                    </label>
+                                    <input 
+                                        type="tel" 
+                                        id="contact_telephone" 
+                                        name="contact_telephone" 
+                                        class="form-control" 
+                                        placeholder="01 23 45 67 89"
+                                    >
+                                    <small class="form-help">Optionnel - pour vous recontacter si nécessaire</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_sujet" class="form-label">
+                                        Sujet <span class="required">*</span>
+                                    </label>
+                                    <select id="contact_sujet" name="contact_sujet" class="form-control" required>
+                                        <option value="">Choisissez un sujet</option>
+                                        <option value="Information générale">Information générale</option>
+                                        <option value="Réservation">Réservation / Booking</option>
+                                        <option value="Problème technique">Problème technique</option>
+                                        <option value="Maintenance">Maintenance</option>
+                                        <option value="Accessibilité">Accessibilité PMR</option>
+                                        <option value="Horaires d'ouverture">Horaires d'ouverture</option>
+                                        <option value="Tarifs">Tarifs</option>
+                                        <option value="Autre">Autre</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="contact_message" class="form-label">
+                                        Message <span class="required">*</span>
+                                    </label>
+                                    <textarea 
+                                        id="contact_message" 
+                                        name="contact_message" 
+                                        class="form-control" 
+                                        rows="6" 
+                                        required
+                                        placeholder="Décrivez votre demande en détail..."
+                                    ></textarea>
+                                    <small class="form-help">Minimum 10 caractères</small>
+                                </div>
+                                
+                                <div class="form-actions">
+    <script src="js/contact.js"></script>
+                                    <button type="submit" id="submitContactBtn" class="btn btn-primary">
+                                        <i class="icon-mail"></i>
+                                        Envoyer le message
+                                    </button>
+                                    <button type="reset" class="btn btn-secondary">
+                                        <i class="icon-refresh"></i>
+                                        Réinitialiser
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Colonne latérale -->
+                <div class="detail-sidebar">
+                    <!-- Actions rapides -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Actions</h3>
+                        <div class="sidebar-actions">
+                            <a href="carte.html" class="sidebar-action">
+                                <i class="icon-map"></i>
+                                Voir sur la carte
+                            </a>
+                            <button class="sidebar-action" id="shareBtn">
+                                <i class="icon-share"></i>
+                                Partager
+                            </button>
+                            <button class="sidebar-action" id="printBtn">
+                                <i class="icon-printer"></i>
+                                Imprimer
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques rapides -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Informations</h3>
+                        <div class="quick-stats">
+                            <div class="quick-stat">
+                                <span class="stat-label">Dernière mise à jour</span>
+                                <span class="stat-value" id="lastUpdate">--</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="stat-label">Numéro d'équipement</span>
+                                <span class="stat-value" id="equipmentNumber">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statut de densité rapide -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Statut densité</h3>
+                        <div class="quick-density-status">
+                            <div class="density-status-item">
+                                <span class="status-label">Niveau actuel :</span>
+                                <span class="status-value" id="densityStatus">--</span>
+                            </div>
+                            <div class="density-status-item">
+                                <span class="status-label">Dernière mise à jour :</span>
+                                <span class="status-value" id="densityLastUpdate">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Équipements similaires -->
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">Équipements similaires</h3>
+                        <div class="similar-equipments" id="similarEquipments">
+                            <div class="loading-placeholder">
+                                <p>Chargement...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Équipements Sportifs</h4>
+                    <p class="footer-description">
+                        Plateforme nationale de gestion des équipements sportifs français.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Liens utiles</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="carte.html">Carte</a></li>
+                        <li><a href="equipements.html">Équipements</a></li>
+                        <li><a href="connexion.html">Connexion</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@equipements-sportifs.fr">Contact</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Équipements Sportifs France. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/densite.js"></script>
+    <script src="js/photos.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Initialisation des photos pour la page détail -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Récupérer l'ID de l'équipement depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const equipementId = urlParams.get('id');
+            
+            if (equipementId) {
+                // Charger les photos existantes
+                afficherPhotos(equipementId, 'galerie-photos');
+                
+                // Initialiser l'upload de photos si l'utilisateur est autorisé
+                // (Cette logique dépend du système d'authentification)
+                const utilisateur = JSON.parse(localStorage.getItem('utilisateur') || '{}');
+                const peutModifier = utilisateur && (
+                    utilisateur.role === 'administrateur' ||
+                    utilisateur.role === 'mairie' ||
+                    utilisateur.role === 'prefecture_departementale' ||
+                    utilisateur.role === 'prefecture_regionale'
+                );
+                
+                if (peutModifier) {
+                    initialiserUploadPhotos(equipementId);
+                    document.getElementById('photo-upload-section').style.display = 'block';
+                    
+                    // Gestion du bouton d'upload
+                    const btnUpload = document.getElementById('btn-upload');
+                    const photoInput = document.getElementById('photo-input');
+                    
+                    if (btnUpload && photoInput) {
+                        btnUpload.addEventListener('click', () => {
+                            photoInput.click();
+                        });
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

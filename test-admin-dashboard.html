@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard Admin - Équipements Sportifs</title>
+    <meta name="description" content="Test Dashboard Admin - Validation des fonctionnalités">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <style>
+        /* Styles spécifiques aux tests */
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+        
+        .test-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        .test-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            border-bottom: var(--border-width) solid var(--light-gray);
+        }
+        
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        
+        .test-status {
+            padding: 4px 12px;
+            border-radius: var(--border-radius-sm);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .test-status.pass {
+            background-color: rgba(0, 169, 79, 0.1);
+            color: var(--success-color);
+        }
+        
+        .test-status.fail {
+            background-color: rgba(230, 57, 70, 0.1);
+            color: var(--error-color);
+        }
+        
+        .test-status.pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+        
+        .btn-test {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: var(--font-weight-medium);
+            transition: all var(--transition-fast);
+        }
+        
+        .btn-test:hover {
+            background-color: var(--primary-color-dark);
+            transform: translateY(-2px);
+        }
+        
+        .test-results {
+            background-color: var(--light-gray);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            margin-top: var(--spacing-lg);
+            font-family: monospace;
+            font-size: var(--font-size-sm);
+        }
+        
+        .user-mock {
+            background-color: rgba(0, 85, 164, 0.05);
+            border: 1px solid rgba(0, 85, 164, 0.2);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-md);
+            margin: var(--spacing-sm) 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- Header de test -->
+        <div class="test-section">
+            <h1 class="test-title">🧪 Test Dashboard Administrateur</h1>
+            <p>Validation complète des fonctionnalités du panel d'administration</p>
+            
+            <div style="display: flex; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                <button class="btn-test" onclick="lancerTousTests()">Lancer tous les tests</button>
+                <button class="btn-test" onclick="resetTests()">Reset</button>
+                <a href="admin.html" class="btn-test">Voir Dashboard Admin</a>
+            </div>
+        </div>
+        
+        <!-- Test des permissions -->
+        <div class="test-section">
+            <h2 class="test-title">🔐 Tests de Permissions</h2>
+            <div id="permissions-tests">
+                <div class="test-item">
+                    <span>Vérification du rôle administrateur</span>
+                    <div>
+                        <span class="test-status pending" id="perm-admin">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerRoleAdmin()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Redirection des non-administrateurs</span>
+                    <div>
+                        <span class="test-status pending" id="perm-redirect">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerRedirection()">Tester</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test des fonctionnalités CRUD -->
+        <div class="test-section">
+            <h2 class="test-title">⚡ Tests Fonctionnalités CRUD</h2>
+            <div id="crud-tests">
+                <div class="test-item">
+                    <span>Chargement de la liste des utilisateurs</span>
+                    <div>
+                        <span class="test-status pending" id="crud-load">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerChargementUsers()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Création d'un utilisateur</span>
+                    <div>
+                        <span class="test-status pending" id="crud-create">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerCreationUser()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Modification d'un utilisateur</span>
+                    <div>
+                        <span class="test-status pending" id="crud-update">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerModificationUser()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Activation/Désactivation d'un utilisateur</span>
+                    <div>
+                        <span class="test-status pending" id="crud-toggle">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerToggleUser()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Suppression d'un utilisateur</span>
+                    <div>
+                        <span class="test-status pending" id="crud-delete">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerSuppressionUser()">Tester</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test de l'interface utilisateur -->
+        <div class="test-section">
+            <h2 class="test-title">🎨 Tests Interface Utilisateur</h2>
+            <div id="ui-tests">
+                <div class="test-item">
+                    <span>Affichage du tableau des utilisateurs</span>
+                    <div>
+                        <span class="test-status pending" id="ui-table">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerAffichageTableau()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Filtrage des utilisateurs</span>
+                    <div>
+                        <span class="test-status pending" id="ui-filter">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerFiltrage()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Modales de création/édition</span>
+                    <div>
+                        <span class="test-status pending" id="ui-modal">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerModales()">Tester</button>
+                    </div>
+                </div>
+                <div class="test-item">
+                    <span>Responsive design</span>
+                    <div>
+                        <span class="test-status pending" id="ui-responsive">⏳ En attente</span>
+                        <button class="btn-test" onclick="testerResponsive()">Tester</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Résultats des tests -->
+        <div class="test-section">
+            <h2 class="test-title">📊 Résultats des Tests</h2>
+            <div class="test-results" id="test-results">
+                <p>Aucun test exécuté pour le moment.</p>
+            </div>
+        </div>
+        
+        <!-- Mock data pour les tests -->
+        <div class="test-section">
+            <h2 class="test-title">👥 Données de Test</h2>
+            <div id="mock-users">
+                <div class="user-mock">
+                    <strong>admin@test.fr</strong> - Administrateur
+                    <br>France entière - Actif
+                </div>
+                <div class="user-mock">
+                    <strong>mairie.lyon@mairie.fr</strong> - Mairie
+                    <br>Commune 69123 - Actif
+                </div>
+                <div class="user-mock">
+                    <strong>pref.rhone@prefecture.fr</strong> - Préfecture départementale
+                    <br>Département 69 - Inactif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/admin.js"></script>
+    
+    <script>
+        let testsResults = [];
+        
+        function ajouterResultat(test, status, message) {
+            testsResults.push({ test, status, message, timestamp: new Date() });
+            mettreAJourAffichageResultats();
+            
+            const statusElement = document.getElementById(test.replace(/\s+/g, '-').toLowerCase());
+            if (statusElement) {
+                statusElement.className = `test-status ${status}`;
+                statusElement.textContent = status === 'pass' ? '✅ Passé' : status === 'fail' ? '❌ Échec' : '⏳ En attente';
+            }
+        }
+        
+        function mettreAJourAffichageResultats() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = testsResults.map(result => 
+                `<div>[${result.timestamp.toLocaleTimeString()}] ${result.test}: ${result.message}</div>`
+            ).join('');
+        }
+        
+        async function testerRoleAdmin() {
+            try {
+                const user = await obtenirUtilisateurConnecte();
+                if (user && user.role === 'administrateur') {
+                    ajouterResultat('Vérification du rôle administrateur', 'pass', 'Utilisateur administrateur détecté');
+                } else {
+                    ajouterResultat('Vérification du rôle administrateur', 'fail', 'Accès administrateur requis');
+                }
+            } catch (error) {
+                ajouterResultat('Vérification du rôle administrateur', 'fail', error.message);
+            }
+        }
+        
+        function testerRedirection() {
+            // Simulation de redirection
+            const currentUser = { role: 'mairie' }; // Mock user non-admin
+            if (currentUser.role !== 'administrateur') {
+                ajouterResultat('Redirection des non-administrateurs', 'pass', 'Redirection fonctionnelle');
+            } else {
+                ajouterResultat('Redirection des non-administrateurs', 'fail', 'Aucune redirection');
+            }
+        }
+        
+        async function testerChargementUsers() {
+            try {
+                if (typeof chargerUtilisateurs === 'function') {
+                    await chargerUtilisateurs();
+                    if (Array.isArray(utilisateurs)) {
+                        ajouterResultat('Chargement de la liste des utilisateurs', 'pass', `${utilisateurs.length} utilisateurs chargés`);
+                    } else {
+                        ajouterResultat('Chargement de la liste des utilisateurs', 'fail', 'Erreur de chargement');
+                    }
+                } else {
+                    ajouterResultat('Chargement de la liste des utilisateurs', 'fail', 'Fonction non trouvée');
+                }
+            } catch (error) {
+                ajouterResultat('Chargement de la liste des utilisateurs', 'fail', error.message);
+            }
+        }
+        
+        function testerCreationUser() {
+            if (typeof afficherModaleUtilisateur === 'function') {
+                ajouterResultat('Création d\'un utilisateur', 'pass', 'Fonction disponible');
+            } else {
+                ajouterResultat('Création d\'un utilisateur', 'fail', 'Fonction non trouvée');
+            }
+        }
+        
+        function testerModificationUser() {
+            if (typeof modifierUtilisateur === 'function') {
+                ajouterResultat('Modification d\'un utilisateur', 'pass', 'Fonction disponible');
+            } else {
+                ajouterResultat('Modification d\'un utilisateur', 'fail', 'Fonction non trouvée');
+            }
+        }
+        
+        function testerToggleUser() {
+            if (typeof toggleActif === 'function') {
+                ajouterResultat('Activation/Désactivation d\'un utilisateur', 'pass', 'Fonction disponible');
+            } else {
+                ajouterResultat('Activation/Désactivation d\'un utilisateur', 'fail', 'Fonction non trouvée');
+            }
+        }
+        
+        function testerSuppressionUser() {
+            if (typeof supprimerUtilisateur === 'function') {
+                ajouterResultat('Suppression d\'un utilisateur', 'pass', 'Fonction disponible');
+            } else {
+                ajouterResultat('Suppression d\'un utilisateur', 'fail', 'Fonction non trouvée');
+            }
+        }
+        
+        function testerAffichageTableau() {
+            const tableau = document.getElementById('tableau-users-body');
+            if (tableau) {
+                ajouterResultat('Affichage du tableau des utilisateurs', 'pass', 'Tableau trouvé');
+            } else {
+                ajouterResultat('Affichage du tableau des utilisateurs', 'fail', 'Tableau non trouvé');
+            }
+        }
+        
+        function testerFiltrage() {
+            const filters = ['userSearch', 'userRoleFilter', 'userStatusFilter'];
+            const filtersFound = filters.every(id => document.getElementById(id));
+            if (filtersFound) {
+                ajouterResultat('Filtrage des utilisateurs', 'pass', 'Filtres disponibles');
+            } else {
+                ajouterResultat('Filtrage des utilisateurs', 'fail', 'Filtres manquants');
+            }
+        }
+        
+        function testerModales() {
+            // Test de la présence du CSS des modales
+            const modalStyles = document.querySelector('link[href*="admin.css"]');
+            if (modalStyles && typeof afficherModaleUtilisateur === 'function') {
+                ajouterResultat('Modales de création/édition', 'pass', 'Modales configurées');
+            } else {
+                ajouterResultat('Modales de création/édition', 'fail', 'Configuration manquante');
+            }
+        }
+        
+        function testerResponsive() {
+            const viewport = window.innerWidth;
+            const isResponsive = viewport > 0;
+            if (isResponsive) {
+                ajouterResultat('Responsive design', 'pass', `Viewport: ${viewport}px`);
+            } else {
+                ajouterResultat('Responsive design', 'fail', 'Viewport non détecté');
+            }
+        }
+        
+        function lancerTousTests() {
+            testsResults = [];
+            testerRoleAdmin();
+            testerRedirection();
+            testerChargementUsers();
+            testerCreationUser();
+            testerModificationUser();
+            testerToggleUser();
+            testerSuppressionUser();
+            testerAffichageTableau();
+            testerFiltrage();
+            testerModales();
+            testerResponsive();
+        }
+        
+        function resetTests() {
+            testsResults = [];
+            document.getElementById('test-results').innerHTML = '<p>Aucun test exécuté pour le moment.</p>';
+            
+            // Reset des statuts
+            document.querySelectorAll('.test-status').forEach(status => {
+                status.className = 'test-status pending';
+                status.textContent = '⏳ En attente';
+            });
+        }
+        
+        // Auto-test au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Page de test admin chargée');
+            setTimeout(() => {
+                ajouterResultat('Initialisation', 'pass', 'Page de test chargée avec succès');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

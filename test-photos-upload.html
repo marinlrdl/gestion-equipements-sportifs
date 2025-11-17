@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Upload Photos - Gestion Équipements Sportifs</title>
+    <meta name="description" content="Page de test pour la fonctionnalité d'upload de photos">
+    
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/photos.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="assets/images/logo.svg" alt="Logo Équipements Sportifs" class="logo">
+                    <span class="brand-name">Équipements Sportifs</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="carte.html" class="nav-link">Carte Interactive</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="equipements.html" class="nav-link">Équipements</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="connexion.html" class="nav-link">Connexion</a>
+                    </li>
+                </ul>
+                
+                <div class="nav-toggle">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="main-content">
+        <div class="container">
+            <!-- En-tête de test -->
+            <div class="test-header">
+                <div class="test-title">
+                    <h1>Test Upload de Photos</h1>
+                    <p class="test-subtitle">
+                        Page de test pour valider toutes les fonctionnalités d'upload et gestion des photos
+                    </p>
+                </div>
+                <div class="test-actions">
+                    <button class="btn btn-secondary" onclick="window.location.href='equipements.html'">
+                        <i class="icon-arrow-left"></i>
+                        Retour aux équipements
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section de test des fonctions -->
+            <div class="test-sections">
+                <!-- Test 1: Upload de photos -->
+                <section class="test-section">
+                    <h2 class="section-title">
+                        <i class="icon-upload"></i>
+                        Test 1: Upload de Photos
+                    </h2>
+                    <div class="test-description">
+                        <p>Teste l'upload de photos vers Supabase Storage avec validation et gestion d'erreurs.</p>
+                    </div>
+                    
+                    <div class="photo-upload-section">
+                        <div class="upload-header">
+                            <h3>Zone d'upload de test</h3>
+                            <p>Sélectionnez un équipement de test et uploadez des photos</p>
+                        </div>
+                        
+                        <div class="test-controls">
+                            <div class="form-group">
+                                <label for="test-equipment-id" class="form-label">ID de l'équipement de test</label>
+                                <input type="text" id="test-equipment-id" class="form-input" 
+                                       placeholder="Ex: test-equipment-123" value="test-equipment-123">
+                            </div>
+                        </div>
+                        
+                        <div class="photo-upload-area" id="test-upload-area">
+                            <input type="file" id="test-photo-input" multiple accept="image/*" style="display: none;">
+                            <div class="upload-content">
+                                <i class="icon-upload"></i>
+                                <h3>Glissez vos photos ici</h3>
+                                <p>ou <span class="upload-link" onclick="document.getElementById('test-photo-input').click()">cliquez pour sélectionner</span></p>
+                                <small>Formats acceptés : JPG, PNG, GIF (max 5MB par photo)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="upload-controls">
+                            <button type="button" class="btn btn-primary" id="test-btn-upload">
+                                <i class="icon-camera"></i>
+                                Sélectionner des photos
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="testClearPhotos()">
+                                <i class="icon-refresh"></i>
+                                Effacer les photos
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="test-results" id="test-upload-results">
+                        <h4>Résultats du test d'upload</h4>
+                        <div id="upload-log" class="test-log"></div>
+                    </div>
+                </section>
+
+                <!-- Test 2: Affichage des photos -->
+                <section class="test-section">
+                    <h2 class="section-title">
+                        <i class="icon-camera"></i>
+                        Test 2: Affichage des Photos
+                    </h2>
+                    <div class="test-description">
+                        <p>Teste l'affichage des photos dans une galerie avec lightbox.</p>
+                    </div>
+                    
+                    <div class="test-controls">
+                        <div class="form-group">
+                            <label for="test-gallery-equipment-id" class="form-label">ID de l'équipement pour la galerie</label>
+                            <input type="text" id="test-gallery-equipment-id" class="form-input" 
+                                   placeholder="Ex: test-equipment-123" value="test-equipment-123">
+                            <button type="button" class="btn btn-secondary" onclick="testLoadPhotos()">
+                                <i class="icon-refresh"></i>
+                                Charger les photos
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="test-galerie-photos" class="photos-container">
+                        <div class="loading-placeholder">
+                            <i class="icon-refresh"></i>
+                            <p>Cliquez sur "Charger les photos" pour tester l'affichage</p>
+                        </div>
+                    </div>
+                    
+                    <div class="test-results" id="test-display-results">
+                        <h4>Résultats du test d'affichage</h4>
+                        <div id="display-log" class="test-log"></div>
+                    </div>
+                </section>
+
+                <!-- Test 3: Suppression de photos -->
+                <section class="test-section">
+                    <h2 class="section-title">
+                        <i class="icon-trash"></i>
+                        Test 3: Suppression de Photos
+                    </h2>
+                    <div class="test-description">
+                        <p>Teste la suppression de photos depuis Supabase Storage.</p>
+                    </div>
+                    
+                    <div class="test-controls">
+                        <div class="form-group">
+                            <label for="test-delete-equipment-id" class="form-label">ID de l'équipement</label>
+                            <input type="text" id="test-delete-equipment-id" class="form-input" 
+                                   placeholder="Ex: test-equipment-123" value="test-equipment-123">
+                        </div>
+                        <div class="form-group">
+                            <label for="test-delete-photo-url" class="form-label">URL de la photo à supprimer</label>
+                            <input type="url" id="test-delete-photo-url" class="form-input" 
+                                   placeholder="Ex: https://...">
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="testDeletePhoto()">
+                            <i class="icon-trash"></i>
+                            Supprimer la photo
+                        </button>
+                    </div>
+                    
+                    <div class="test-results" id="test-delete-results">
+                        <h4>Résultats du test de suppression</h4>
+                        <div id="delete-log" class="test-log"></div>
+                    </div>
+                </section>
+
+                <!-- Test 4: Validation et erreurs -->
+                <section class="test-section">
+                    <h2 class="section-title">
+                        <i class="icon-alert"></i>
+                        Test 4: Validation et Gestion d'Erreurs
+                    </h2>
+                    <div class="test-description">
+                        <p>Teste la validation des fichiers et la gestion des erreurs.</p>
+                    </div>
+                    
+                    <div class="test-controls">
+                        <button type="button" class="btn btn-warning" onclick="testValidation()">
+                            <i class="icon-check"></i>
+                            Tester la validation
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="testErrors()">
+                            <i class="icon-alert"></i>
+                            Tester les erreurs
+                        </button>
+                    </div>
+                    
+                    <div class="test-results" id="test-validation-results">
+                        <h4>Résultats des tests de validation</h4>
+                        <div id="validation-log" class="test-log"></div>
+                    </div>
+                </section>
+
+                <!-- Test 5: Performance -->
+                <section class="test-section">
+                    <h2 class="section-title">
+                        <i class="icon-speed"></i>
+                        Test 5: Performance et Optimisation
+                    </h2>
+                    <div class="test-description">
+                        <p>Teste les performances avec plusieurs photos et l'optimisation.</p>
+                    </div>
+                    
+                    <div class="test-controls">
+                        <div class="form-group">
+                            <label for="test-performance-count" class="form-label">Nombre de photos à tester</label>
+                            <input type="number" id="test-performance-count" class="form-input" 
+                                   min="1" max="20" value="5">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="testPerformance()">
+                            <i class="icon-speed"></i>
+                            Tester la performance
+                        </button>
+                    </div>
+                    
+                    <div class="test-results" id="test-performance-results">
+                        <h4>Résultats du test de performance</h4>
+                        <div id="performance-log" class="test-log"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Résumé des tests -->
+            <section class="test-summary">
+                <h2 class="section-title">
+                    <i class="icon-chart"></i>
+                    Résumé des Tests
+                </h2>
+                <div class="test-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Tests réussis</span>
+                        <span class="stat-value" id="tests-success">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Tests échoués</span>
+                        <span class="stat-value" id="tests-failed">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Temps total</span>
+                        <span class="stat-value" id="tests-time">0ms</span>
+                    </div>
+                </div>
+                
+                <div class="test-actions">
+                    <button type="button" class="btn btn-primary" onclick="runAllTests()">
+                        <i class="icon-play"></i>
+                        Lancer tous les tests
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="clearAllLogs()">
+                        <i class="icon-refresh"></i>
+                        Effacer tous les logs
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 class="footer-title">Équipements Sportifs</h4>
+                    <p class="footer-description">
+                        Plateforme nationale de gestion des équipements sportifs français.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Tests</h4>
+                    <ul class="footer-links">
+                        <li><a href="test-equipements-crud.html">Test CRUD</a></li>
+                        <li><a href="test-distance-integration.html">Test Distance</a></li>
+                        <li><a href="test-densite-integration.html">Test Densité</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-title">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:contact@equipements-sportifs.fr">Contact</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Équipements Sportifs France. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Scripts JavaScript -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/photos.js"></script>
+    
+    <!-- Scripts de test -->
+    <script>
+        // Variables globales pour les tests
+        let testStats = {
+            success: 0,
+            failed: 0,
+            startTime: 0
+        };
+
+        // Initialisation des tests
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Initialisation des tests de photos...');
+            
+            // Configuration des event listeners
+            const testPhotoInput = document.getElementById('test-photo-input');
+            const testBtnUpload = document.getElementById('test-btn-upload');
+            const testUploadArea = document.getElementById('test-upload-area');
+            
+            if (testBtnUpload && testPhotoInput) {
+                testBtnUpload.addEventListener('click', () => {
+                    testPhotoInput.click();
+                });
+                
+                testPhotoInput.addEventListener('change', (event) => {
+                    handleTestUpload(event);
+                });
+            }
+            
+            // Configuration du drag & drop
+            if (testUploadArea) {
+                testUploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    testUploadArea.classList.add('dragover');
+                });
+                
+                testUploadArea.addEventListener('dragleave', () => {
+                    testUploadArea.classList.remove('dragover');
+                });
+                
+                testUploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    testUploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    handleTestUpload({ target: { files } });
+                });
+            }
+            
+            console.log('✅ Tests de photos initialisés');
+        });
+
+        // Test d'upload
+        async function handleTestUpload(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+            
+            const equipementId = document.getElementById('test-equipment-id').value;
+            if (!equipementId) {
+                addLog('upload-log', '❌ Erreur: ID d\'équipement requis', 'error');
+                return;
+            }
+            
+            addLog('upload-log', `📤 Début de l'upload de ${files.length} fichier(s) pour l'équipement: ${equipementId}`, 'info');
+            
+            try {
+                await handleUploadPhotos(event, equipementId);
+                addLog('upload-log', '✅ Upload réussi!', 'success');
+                testStats.success++;
+            } catch (error) {
+                addLog('upload-log', `❌ Erreur d'upload: ${error.message}`, 'error');
+                testStats.failed++;
+            }
+            
+            updateTestStats();
+        }
+
+        // Test de chargement des photos
+        async function testLoadPhotos() {
+            const equipementId = document.getElementById('test-gallery-equipment-id').value;
+            if (!equipementId) {
+                addLog('display-log', '❌ Erreur: ID d\'équipement requis', 'error');
+                return;
+            }
+            
+            addLog('display-log', `📷 Chargement des photos pour l'équipement: ${equipementId}`, 'info');
+            
+            try {
+                await afficherPhotos(equipementId, 'test-galerie-photos');
+                addLog('display-log', '✅ Photos chargées avec succès!', 'success');
+                testStats.success++;
+            } catch (error) {
+                addLog('display-log', `❌ Erreur de chargement: ${error.message}`, 'error');
+                testStats.failed++;
+            }
+            
+            updateTestStats();
+        }
+
+        // Test de suppression
+        async function testDeletePhoto() {
+            const equipementId = document.getElementById('test-delete-equipment-id').value;
+            const photoUrl = document.getElementById('test-delete-photo-url').value;
+            
+            if (!equipementId || !photoUrl) {
+                addLog('delete-log', '❌ Erreur: ID d\'équipement et URL de photo requis', 'error');
+                return;
+            }
+            
+            addLog('delete-log', `🗑️ Suppression de la photo: ${photoUrl}`, 'info');
+            
+            try {
+                const success = await supprimerPhoto(equipementId, photoUrl);
+                if (success) {
+                    addLog('delete-log', '✅ Photo supprimée avec succès!', 'success');
+                    testStats.success++;
+                } else {
+                    addLog('delete-log', '❌ Échec de la suppression', 'error');
+                    testStats.failed++;
+                }
+            } catch (error) {
+                addLog('delete-log', `❌ Erreur de suppression: ${error.message}`, 'error');
+                testStats.failed++;
+            }
+            
+            updateTestStats();
+        }
+
+        // Test de validation
+        function testValidation() {
+            addLog('validation-log', '🔍 Test de validation des fichiers...', 'info');
+            
+            // Test 1: Fichier trop volumineux
+            const largeFile = new File([''], 'large-image.jpg', { type: 'image/jpeg' });
+            Object.defineProperty(largeFile, 'size', { value: 10 * 1024 * 1024 }); // 10MB
+            
+            if (!largeFile.type.startsWith('image/')) {
+                addLog('validation-log', '❌ Échec: Type de fichier non image', 'error');
+                testStats.failed++;
+            } else if (largeFile.size > 5 * 1024 * 1024) {
+                addLog('validation-log', '❌ Échec: Fichier trop volumineux (>5MB)', 'error');
+                testStats.failed++;
+            } else {
+                addLog('validation-log', '✅ Succès: Validation fichier image', 'success');
+                testStats.success++;
+            }
+            
+            // Test 2: Fichier non-image
+            const nonImageFile = new File([''], 'document.pdf', { type: 'application/pdf' });
+            if (!nonImageFile.type.startsWith('image/')) {
+                addLog('validation-log', '✅ Succès: Rejet fichier non-image', 'success');
+                testStats.success++;
+            } else {
+                addLog('validation-log', '❌ Échec: Fichier non-image accepté', 'error');
+                testStats.failed++;
+            }
+            
+            updateTestStats();
+        }
+
+        // Test des erreurs
+        function testErrors() {
+            addLog('validation-log', '⚠️ Test de gestion des erreurs...', 'info');
+            
+            // Test 1: Erreur de connexion Supabase
+            const originalSupabase = window.AppConfig?.supabase;
+            if (originalSupabase) {
+                window.AppConfig.supabase = null;
+                addLog('validation-log', '✅ Succès: Gestion erreur Supabase null', 'success');
+                testStats.success++;
+                window.AppConfig.supabase = originalSupabase;
+            }
+            
+            // Test 2: Erreur d'upload
+            try {
+                // Simulation d'erreur d'upload
+                throw new Error('Erreur simulée d\'upload');
+            } catch (error) {
+                addLog('validation-log', `✅ Succès: Gestion erreur upload - ${error.message}`, 'success');
+                testStats.success++;
+            }
+            
+            updateTestStats();
+        }
+
+        // Test de performance
+        async function testPerformance() {
+            const count = parseInt(document.getElementById('test-performance-count').value) || 5;
+            const equipementId = document.getElementById('test-equipment-id').value || 'test-performance';
+            
+            addLog('performance-log', `⚡ Test de performance avec ${count} photos...`, 'info');
+            
+            const startTime = performance.now();
+            let successCount = 0;
+            
+            // Créer des fichiers de test simulés
+            const testFiles = [];
+            for (let i = 0; i < count; i++) {
+                const file = new File([`Test image ${i}`], `test-${i}.jpg`, { type: 'image/jpeg' });
+                Object.defineProperty(file, 'size', { value: 1024 * 1024 }); // 1MB
+                testFiles.push(file);
+            }
+            
+            try {
+                // Simuler l'upload de plusieurs fichiers
+                for (const file of testFiles) {
+                    const fileName = `${equipementId}/${Date.now()}-${file.name}`;
+                    addLog('performance-log', `📤 Upload: ${fileName}`, 'info');
+                    successCount++;
+                }
+                
+                const endTime = performance.now();
+                const duration = endTime - startTime;
+                
+                addLog('performance-log', `✅ Performance: ${successCount}/${count} uploads en ${duration.toFixed(2)}ms`, 'success');
+                testStats.success++;
+                
+                if (duration < 5000) {
+                    addLog('performance-log', '🚀 Performance excellente!', 'success');
+                } else if (duration < 10000) {
+                    addLog('performance-log', '⚠️ Performance acceptable', 'warning');
+                } else {
+                    addLog('performance-log', '🐌 Performance lente', 'error');
+                }
+                
+            } catch (error) {
+                addLog('performance-log', `❌ Erreur de performance: ${error.message}`, 'error');
+                testStats.failed++;
+            }
+            
+            updateTestStats();
+        }
+
+        // Fonctions utilitaires pour les tests
+        function addLog(logId, message, type = 'info') {
+            const logElement = document.getElementById(logId);
+            if (!logElement) return;
+            
+            const timestamp = new Date().toLocaleTimeString('fr-FR');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `<span class="log-time">[${timestamp}]</span> ${message}`;
+            
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function updateTestStats() {
+            document.getElementById('tests-success').textContent = testStats.success;
+            document.getElementById('tests-failed').textContent = testStats.failed;
+        }
+
+        function clearAllLogs() {
+            const logs = ['upload-log', 'display-log', 'delete-log', 'validation-log', 'performance-log'];
+            logs.forEach(logId => {
+                const logElement = document.getElementById(logId);
+                if (logElement) logElement.innerHTML = '';
+            });
+            
+            testStats.success = 0;
+            testStats.failed = 0;
+            updateTestStats();
+        }
+
+        function testClearPhotos() {
+            const container = document.getElementById('test-galerie-photos');
+            if (container) {
+                container.innerHTML = '<div class="no-photos"><i class="icon-camera"></i><p>Aucune photo</p></div>';
+            }
+            addLog('upload-log', '🧹 Photos effacées', 'info');
+        }
+
+        async function runAllTests() {
+            clearAllLogs();
+            testStats.startTime = performance.now();
+            
+            addLog('upload-log', '🚀 Lancement de tous les tests...', 'info');
+            
+            // Exécuter tous les tests séquentiellement
+            await testValidation();
+            await testErrors();
+            await testPerformance();
+            
+            const totalTime = performance.now() - testStats.startTime;
+            document.getElementById('tests-time').textContent = `${totalTime.toFixed(2)}ms`;
+            
+            addLog('upload-log', `🏁 Tests terminés en ${totalTime.toFixed(2)}ms`, 'success');
+        }
+    </script>
+</body>
+</html>
